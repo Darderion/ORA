@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace ORA
         private void Form1_Load(object sender, EventArgs e)
         {
             //Setting font
-            this.Font = new Font("Splash", 14, FontStyle.Bold);
+            this.Font = new Font("Splash", 18, FontStyle.Bold);
             //Full-screen mode
             FormBorderStyle = FormBorderStyle.None;
             WindowState = FormWindowState.Maximized;
@@ -50,7 +51,7 @@ namespace ORA
             mainTabControl.Left = 170;
             mainTabControl.Width = Width - mainTabControl.Left - 10;
             mainTabControl.Height = Height - mainTabControl.Top + 30;
-            mainTabControl.Top = -30;
+            mainTabControl.Top = -35;
             mainTabControl.Appearance = TabAppearance.FlatButtons;
             mainTabControl.SizeMode = TabSizeMode.Fixed;
             //Initializing Menu Buttons (Represented by PictureBoxes)
@@ -76,8 +77,68 @@ namespace ORA
             menuButtons[CL.ExitButton].Click += ExitButton_OnClick_Handler;
 
             tabPage1.BackColor = Color.Black;
-            tabPage2.BackColor = Color.Blue;
+            tabPage2.BackColor = Color.Gray;
             tabPage3.BackColor = Color.Green;
+
+            editorPlayer.Width = tabPage2.Width - 50;
+            editorPlayer.Top = buttonPlay.Top + 50;
+            editorPlayer.Left = 20;
+            editorPlayer.Height = tabPage2.Height - editorPlayer.Top - 50;
+
+            textBoxVideoURL.Left = editorPlayer.Left;
+            textBoxSubtitle.Left = editorPlayer.Left + 80;
+            textBoxVideoURL.Width = tabPage2.Width - 50;
+            textBoxSubtitle.Width = textBoxVideoURL.Width + editorPlayer.Left - textBoxSubtitle.Left;
+            textBoxSubtitle.Top = editorPlayer.Top + editorPlayer.Height + 10;
+            labelCurrentPos.Left = editorPlayer.Left;
+            labelCurrentPos.Top = textBoxSubtitle.Top;
+            labelCurrentPos.Text = "";
+        }
+
+        private void buttonResumePause_Click(object sender, EventArgs e)
+        {
+            if (buttonResumePause.Text == "Resume")
+            {
+                editorTimer.Enabled = true;
+                buttonResumePause.Text = "Pause";
+                textBoxSubtitle.Enabled = false;
+                editorPlayer.Ctlcontrols.play();
+            }
+            else
+            {
+                editorTimer.Enabled = false;
+                buttonResumePause.Text = "Resume";
+                textBoxSubtitle.Enabled = true;
+                editorPlayer.Ctlcontrols.pause();
+            }
+        }
+
+        private void buttonPlay_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(textBoxVideoURL.Text) == true)
+            {
+                if (textBoxVideoURL.Text.Remove(0, textBoxVideoURL.Text.Length - 3) == "mp4")
+                {
+                    editorTimer.Enabled = true;
+                    buttonResumePause.Text = "Pause";
+                    textBoxSubtitle.Enabled = false;
+                    editorPlayer.URL = textBoxVideoURL.Text;
+                    labelCurrentPos.Text = "0";
+                }
+            }
+        }
+
+        private void editorTimer_Tick(object sender, EventArgs e)
+        {
+            double curPos = editorPlayer.Ctlcontrols.currentPosition;
+            labelCurrentPos.Text = curPos.ToString();
+        }
+
+        private void buttonScroll5s_Click(object sender, EventArgs e)
+        {
+            editorPlayer.Ctlcontrols.currentPosition -= 5;
+            editorPlayer.Ctlcontrols.play();
+            editorPlayer.Ctlcontrols.pause();
         }
     }
 }

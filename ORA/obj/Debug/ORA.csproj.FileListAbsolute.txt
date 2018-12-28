@@ -1,9 +1,13 @@
 C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\ORA.exe.config
 C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\ORA.exe
-C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\ORA.pdb
-C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.csprojResolveAssemblyReference.cache
+C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\Interop.WMPLib.dll
+C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.csproj.ResolveComReference.cache
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.Form1.resources
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.Properties.Resources.resources
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.csproj.GenerateResource.Cache
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.exe
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.pdb
+C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\ORA.pdb
+C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\Interop.WMPLib.dll
+C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\AxInterop.WMPLib.dll
