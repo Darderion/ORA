@@ -13,7 +13,15 @@ namespace ORA
 {
     public partial class Form1 : Form
     {
+        private enum EditorViewState { Video, List };
+        EditorViewState editorViewState = EditorViewState.Video;
+        private enum EditorPlayState { Play, Pause };
+        EditorPlayState editorPlayState = EditorPlayState.Pause;
+
         PictureBox[] menuButtons;
+        //Test vars
+        TMap map = new TMap("JJV1", "C:\\Programming\\JJS.mp4", 162);
+        int curPos = 0;
 
         public Form1()
         {
@@ -76,10 +84,6 @@ namespace ORA
             menuButtons[CL.OptionsButton].Click += OptionsButton_OnClick_Handler;
             menuButtons[CL.ExitButton].Click += ExitButton_OnClick_Handler;
 
-            tabPage1.BackColor = Color.Black;
-            tabPage2.BackColor = Color.Gray;
-            tabPage3.BackColor = Color.Green;
-
             editorPlayer.Width = tabPage2.Width - 50;
             editorPlayer.Top = buttonPlay.Top + 50;
             editorPlayer.Left = 20;
@@ -90,22 +94,36 @@ namespace ORA
             textBoxVideoURL.Width = tabPage2.Width - 50;
             textBoxSubtitle.Width = textBoxVideoURL.Width + editorPlayer.Left - textBoxSubtitle.Left;
             textBoxSubtitle.Top = editorPlayer.Top + editorPlayer.Height + 10;
-            labelCurrentPos.Left = editorPlayer.Left;
-            labelCurrentPos.Top = textBoxSubtitle.Top;
-            labelCurrentPos.Text = "";
+            labelVideoTimer.Left = editorPlayer.Left;
+            labelVideoTimer.Top = textBoxSubtitle.Top;
+            labelVideoTimer.Text = "";
+
+            listBoxEditor.Width = editorPlayer.Width;
+            listBoxEditor.Height = editorPlayer.Height;
+            listBoxEditor.Left = editorPlayer.Left;
+            listBoxEditor.Top = editorPlayer.Top;
+            
+            //Test properties
+            tabPage1.BackColor = Color.Black;
+            tabPage2.BackColor = Color.Gray;
+            tabPage3.BackColor = Color.Green;
+            textBoxVideoURL.Text = "C:\\Programming\\JJS.mp4";
         }
 
         private void buttonResumePause_Click(object sender, EventArgs e)
         {
-            if (buttonResumePause.Text == "Resume")
+            if (editorPlayState == EditorPlayState.Pause)
             {
+                editorPlayState = EditorPlayState.Play;
                 editorTimer.Enabled = true;
                 buttonResumePause.Text = "Pause";
+                textBoxSubtitle.ForeColor = Color.Black;
                 textBoxSubtitle.Enabled = false;
                 editorPlayer.Ctlcontrols.play();
             }
             else
             {
+                editorPlayState = EditorPlayState.Pause;
                 editorTimer.Enabled = false;
                 buttonResumePause.Text = "Resume";
                 textBoxSubtitle.Enabled = true;
@@ -119,19 +137,92 @@ namespace ORA
             {
                 if (textBoxVideoURL.Text.Remove(0, textBoxVideoURL.Text.Length - 3) == "mp4")
                 {
+                    textBoxSubtitle.Text = "";
                     editorTimer.Enabled = true;
                     buttonResumePause.Text = "Pause";
                     textBoxSubtitle.Enabled = false;
                     editorPlayer.URL = textBoxVideoURL.Text;
-                    labelCurrentPos.Text = "0";
+                    labelVideoTimer.Text = "0";
+                    UpdateEditorListBox();
                 }
             }
         }
 
         private void editorTimer_Tick(object sender, EventArgs e)
         {
-            double curPos = editorPlayer.Ctlcontrols.currentPosition;
-            labelCurrentPos.Text = curPos.ToString();
+            double timer_curPos = editorPlayer.Ctlcontrols.currentPosition;
+            curPos = (int)timer_curPos;
+            string str;
+            if (map.subtitles.TryGetValue(curPos,out str) == true)
+            {
+                textBoxSubtitle.ForeColor = Color.Green;
+                textBoxSubtitle.Text = str;
+                //7-11-12-8
+            }
+            labelVideoTimer.Text = curPos.ToString();
+        }
+
+        private void buttonScroll1s_Click(object sender, EventArgs e)
+        {
+            editorPlayer.Ctlcontrols.currentPosition -= 1;
+            editorPlayer.Ctlcontrols.play();
+            editorPlayer.Ctlcontrols.pause();
+            curPos = (int)editorPlayer.Ctlcontrols.currentPosition;
+            labelVideoTimer.Text = curPos.ToString();
+        }
+
+        private void textBoxSubtitle_TextChanged(object sender, EventArgs e)
+        {
+            string str;
+            if (map.subtitles.TryGetValue(curPos, out str) == true)
+            {
+                if (textBoxSubtitle.Text == str)
+                {
+                    textBoxSubtitle.ForeColor = Color.Green;
+                }
+                else
+                {
+                    textBoxSubtitle.ForeColor = Color.Red;
+                }
+            }
+            else
+            {
+                textBoxSubtitle.ForeColor = Color.Blue;
+            }
+        }
+
+        private void UpdateEditorListBox()
+        {
+            listBoxEditor.Items.Clear();
+            listBoxEditor.Items.AddRange(map.GetEditorList().ToArray());
+        }
+
+        private void textBoxSubtitle_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                map.subtitles[curPos] = textBoxSubtitle.Text;
+                textBoxSubtitle.ForeColor = Color.Green;
+                UpdateEditorListBox();
+            }
+        }
+
+        private void buttonEditorView_Click(object sender, EventArgs e)
+        {
+            if (editorViewState == EditorViewState.Video)
+            {
+                editorViewState = EditorViewState.List;
+                buttonEditorView.Text = "List";
+                editorPlayer.Visible = false;
+                listBoxEditor.Visible = true;
+            }
+            else
+            {
+                editorViewState = EditorViewState.Video;
+                buttonEditorView.Text = "Video";
+                editorPlayer.Visible = true;
+                listBoxEditor.Visible = false;
+            }
         }
 
         private void buttonScroll5s_Click(object sender, EventArgs e)
@@ -139,6 +230,8 @@ namespace ORA
             editorPlayer.Ctlcontrols.currentPosition -= 5;
             editorPlayer.Ctlcontrols.play();
             editorPlayer.Ctlcontrols.pause();
+            curPos = (int)editorPlayer.Ctlcontrols.currentPosition;
+            labelVideoTimer.Text = curPos.ToString();
         }
     }
 }

@@ -25,5 +25,15 @@ namespace ORA
         public string videoName;
         //Duration of a playable part of the video "VideoName" in seconds
         public int maxPos;
+
+        public List<string> GetEditorList()
+        {
+            List<string> res = new List<string>();
+            foreach(var s in subtitles)
+            {
+                res.Add("["+s.Key+"] "+s.Value);
+            }
+            return res;
+        }
     }
 }
