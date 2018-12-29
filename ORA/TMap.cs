@@ -29,9 +29,12 @@ namespace ORA
         public List<string> GetEditorList()
         {
             List<string> res = new List<string>();
-            foreach(var s in subtitles)
+            for(int i = 0; i < maxPos; i++)
             {
-                res.Add("["+s.Key+"] "+s.Value);
+                if (subtitles.ContainsKey(i) == true)
+                {
+                    res.Add("[" + i + "] " + subtitles[i]);
+                }
             }
             return res;
         }

@@ -33,6 +33,9 @@
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buttonScroll5s2 = new System.Windows.Forms.Button();
+            this.buttonEditorView = new System.Windows.Forms.Button();
+            this.listBoxEditor = new System.Windows.Forms.ListBox();
             this.buttonScroll1s = new System.Windows.Forms.Button();
             this.textBoxSubtitle = new System.Windows.Forms.TextBox();
             this.labelVideoTimer = new System.Windows.Forms.Label();
@@ -43,9 +46,6 @@
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
-            this.listBoxEditor = new System.Windows.Forms.ListBox();
-            this.buttonEditorView = new System.Windows.Forms.Button();
-            this.buttonScroll5s2 = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
@@ -93,6 +93,35 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // buttonScroll5s2
+            // 
+            this.buttonScroll5s2.Location = new System.Drawing.Point(221, 52);
+            this.buttonScroll5s2.Name = "buttonScroll5s2";
+            this.buttonScroll5s2.Size = new System.Drawing.Size(57, 23);
+            this.buttonScroll5s2.TabIndex = 10;
+            this.buttonScroll5s2.Text = "<<<";
+            this.buttonScroll5s2.UseVisualStyleBackColor = true;
+            this.buttonScroll5s2.Click += new System.EventHandler(this.buttonScroll5s_Click);
+            // 
+            // buttonEditorView
+            // 
+            this.buttonEditorView.Location = new System.Drawing.Point(284, 52);
+            this.buttonEditorView.Name = "buttonEditorView";
+            this.buttonEditorView.Size = new System.Drawing.Size(57, 23);
+            this.buttonEditorView.TabIndex = 9;
+            this.buttonEditorView.Text = "Video";
+            this.buttonEditorView.UseVisualStyleBackColor = true;
+            this.buttonEditorView.Click += new System.EventHandler(this.buttonEditorView_Click);
+            // 
+            // listBoxEditor
+            // 
+            this.listBoxEditor.FormattingEnabled = true;
+            this.listBoxEditor.Location = new System.Drawing.Point(21, 94);
+            this.listBoxEditor.Name = "listBoxEditor";
+            this.listBoxEditor.Size = new System.Drawing.Size(120, 95);
+            this.listBoxEditor.TabIndex = 8;
+            this.listBoxEditor.Visible = false;
+            // 
             // buttonScroll1s
             // 
             this.buttonScroll1s.Location = new System.Drawing.Point(183, 52);
@@ -139,7 +168,6 @@
             this.buttonPlay.TabIndex = 3;
             this.buttonPlay.Text = "Play from start";
             this.buttonPlay.UseVisualStyleBackColor = true;
-            this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
             // buttonResumePause
             // 
@@ -149,7 +177,6 @@
             this.buttonResumePause.TabIndex = 2;
             this.buttonResumePause.Text = "Resume";
             this.buttonResumePause.UseVisualStyleBackColor = true;
-            this.buttonResumePause.Click += new System.EventHandler(this.buttonResumePause_Click);
             // 
             // labelVideoURL
             // 
@@ -180,35 +207,6 @@
             // 
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
-            // 
-            // listBoxEditor
-            // 
-            this.listBoxEditor.FormattingEnabled = true;
-            this.listBoxEditor.Location = new System.Drawing.Point(21, 94);
-            this.listBoxEditor.Name = "listBoxEditor";
-            this.listBoxEditor.Size = new System.Drawing.Size(120, 95);
-            this.listBoxEditor.TabIndex = 8;
-            this.listBoxEditor.Visible = false;
-            // 
-            // buttonEditorView
-            // 
-            this.buttonEditorView.Location = new System.Drawing.Point(284, 52);
-            this.buttonEditorView.Name = "buttonEditorView";
-            this.buttonEditorView.Size = new System.Drawing.Size(57, 23);
-            this.buttonEditorView.TabIndex = 9;
-            this.buttonEditorView.Text = "Video";
-            this.buttonEditorView.UseVisualStyleBackColor = true;
-            this.buttonEditorView.Click += new System.EventHandler(this.buttonEditorView_Click);
-            // 
-            // buttonScroll5s2
-            // 
-            this.buttonScroll5s2.Location = new System.Drawing.Point(221, 52);
-            this.buttonScroll5s2.Name = "buttonScroll5s2";
-            this.buttonScroll5s2.Size = new System.Drawing.Size(57, 23);
-            this.buttonScroll5s2.TabIndex = 10;
-            this.buttonScroll5s2.Text = "<<<";
-            this.buttonScroll5s2.UseVisualStyleBackColor = true;
-            this.buttonScroll5s2.Click += new System.EventHandler(this.buttonScroll5s_Click);
             // 
             // Form1
             // 

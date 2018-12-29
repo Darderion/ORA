@@ -8,20 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ORA.TMapEditor;
 
 namespace ORA
 {
     public partial class Form1 : Form
     {
-        private enum EditorViewState { Video, List };
-        EditorViewState editorViewState = EditorViewState.Video;
-        private enum EditorPlayState { Play, Pause };
-        EditorPlayState editorPlayState = EditorPlayState.Pause;
-
+        TMapEditor mapEditor;
         PictureBox[] menuButtons;
-        //Test vars
-        TMap map = new TMap("JJV1", "C:\\Programming\\JJS.mp4", 162);
-        int curPos = 0;
 
         public Form1()
         {
@@ -108,130 +102,51 @@ namespace ORA
             tabPage2.BackColor = Color.Gray;
             tabPage3.BackColor = Color.Green;
             textBoxVideoURL.Text = "C:\\Programming\\JJS.mp4";
-        }
 
-        private void buttonResumePause_Click(object sender, EventArgs e)
-        {
-            if (editorPlayState == EditorPlayState.Pause)
-            {
-                editorPlayState = EditorPlayState.Play;
-                editorTimer.Enabled = true;
-                buttonResumePause.Text = "Pause";
-                textBoxSubtitle.ForeColor = Color.Black;
-                textBoxSubtitle.Enabled = false;
-                editorPlayer.Ctlcontrols.play();
-            }
-            else
-            {
-                editorPlayState = EditorPlayState.Pause;
-                editorTimer.Enabled = false;
-                buttonResumePause.Text = "Resume";
-                textBoxSubtitle.Enabled = true;
-                editorPlayer.Ctlcontrols.pause();
-            }
-        }
-
-        private void buttonPlay_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(textBoxVideoURL.Text) == true)
-            {
-                if (textBoxVideoURL.Text.Remove(0, textBoxVideoURL.Text.Length - 3) == "mp4")
-                {
-                    textBoxSubtitle.Text = "";
-                    editorTimer.Enabled = true;
-                    buttonResumePause.Text = "Pause";
-                    textBoxSubtitle.Enabled = false;
-                    editorPlayer.URL = textBoxVideoURL.Text;
-                    labelVideoTimer.Text = "0";
-                    UpdateEditorListBox();
-                }
-            }
+            mapEditor = TMapEditor.Create()
+                .Play(buttonPlay)
+                .Player(editorPlayer)
+                .Timer(editorTimer)
+                .PauseResume(buttonResumePause)
+                .ListBox(listBoxEditor)
+                .View(buttonEditorView)
+                .Subtitles(textBoxSubtitle)
+                .LabelForTimer(labelVideoTimer)
+                .TextBoxURL(textBoxVideoURL);
+            mapEditor.AddHandlers();
         }
 
         private void editorTimer_Tick(object sender, EventArgs e)
         {
-            double timer_curPos = editorPlayer.Ctlcontrols.currentPosition;
-            curPos = (int)timer_curPos;
-            string str;
-            if (map.subtitles.TryGetValue(curPos,out str) == true)
-            {
-                textBoxSubtitle.ForeColor = Color.Green;
-                textBoxSubtitle.Text = str;
-                //7-11-12-8
-            }
-            labelVideoTimer.Text = curPos.ToString();
-        }
-
-        private void buttonScroll1s_Click(object sender, EventArgs e)
-        {
-            editorPlayer.Ctlcontrols.currentPosition -= 1;
-            editorPlayer.Ctlcontrols.play();
-            editorPlayer.Ctlcontrols.pause();
-            curPos = (int)editorPlayer.Ctlcontrols.currentPosition;
-            labelVideoTimer.Text = curPos.ToString();
+            mapEditor.timerTick();
         }
 
         private void textBoxSubtitle_TextChanged(object sender, EventArgs e)
         {
-            string str;
-            if (map.subtitles.TryGetValue(curPos, out str) == true)
-            {
-                if (textBoxSubtitle.Text == str)
-                {
-                    textBoxSubtitle.ForeColor = Color.Green;
-                }
-                else
-                {
-                    textBoxSubtitle.ForeColor = Color.Red;
-                }
-            }
-            else
-            {
-                textBoxSubtitle.ForeColor = Color.Blue;
-            }
-        }
-
-        private void UpdateEditorListBox()
-        {
-            listBoxEditor.Items.Clear();
-            listBoxEditor.Items.AddRange(map.GetEditorList().ToArray());
+            mapEditor.subtitles_line_changed();
         }
 
         private void textBoxSubtitle_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                map.subtitles[curPos] = textBoxSubtitle.Text;
-                textBoxSubtitle.ForeColor = Color.Green;
-                UpdateEditorListBox();
+                mapEditor.SaveLine();
             }
         }
 
         private void buttonEditorView_Click(object sender, EventArgs e)
         {
-            if (editorViewState == EditorViewState.Video)
-            {
-                editorViewState = EditorViewState.List;
-                buttonEditorView.Text = "List";
-                editorPlayer.Visible = false;
-                listBoxEditor.Visible = true;
-            }
-            else
-            {
-                editorViewState = EditorViewState.Video;
-                buttonEditorView.Text = "Video";
-                editorPlayer.Visible = true;
-                listBoxEditor.Visible = false;
-            }
+            mapEditor.ChangeViewState();
+        }
+
+        private void buttonScroll1s_Click(object sender, EventArgs e)
+        {
+            mapEditor.Scroll(-1);
         }
 
         private void buttonScroll5s_Click(object sender, EventArgs e)
         {
-            editorPlayer.Ctlcontrols.currentPosition -= 5;
-            editorPlayer.Ctlcontrols.play();
-            editorPlayer.Ctlcontrols.pause();
-            curPos = (int)editorPlayer.Ctlcontrols.currentPosition;
-            labelVideoTimer.Text = curPos.ToString();
+            mapEditor.Scroll(-5);
         }
     }
 }
