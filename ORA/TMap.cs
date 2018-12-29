@@ -11,18 +11,21 @@ namespace ORA
     /// </summary>
     class TMap
     {
-        public TMap(string inp_Scene, string inp_Video, int inp_Pos)
+        public TMap(string inp_Scene, string inp_Video, int inp_startPos, int inp_maxPos)
         {
             subtitles = new Dictionary<int, string>();
             sceneName = inp_Scene;
             videoName = inp_Video;
-            maxPos = inp_Pos;
+            startPos = inp_startPos;
+            maxPos = inp_maxPos;
         }
 
         //Key is the subtitle's starting time in seconds
         public Dictionary<int, string> subtitles;
         public string sceneName;
         public string videoName;
+        //Starting point for playable part
+        public int startPos = 0;
         //Duration of a playable part of the video "VideoName" in seconds
         public int maxPos;
 

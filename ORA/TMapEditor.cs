@@ -81,7 +81,7 @@ namespace ORA
 
         EditorViewState viewState = EditorViewState.Video;
         EditorPlayState playState = EditorPlayState.Pause;
-        TMap map = new TMap("JJV1", "C:\\Programming\\JJS.mp4", 162);
+        TMap map = new TMap("JJV1", "C:\\Programming\\JJS.mp4", 0, 162);
         public int curPos = 0;
 
         Button buttonPauseResume;
@@ -141,6 +141,14 @@ namespace ORA
             listBox.Items.AddRange(map.GetEditorList().ToArray());
         }
 
+        public void Save(string inp_videoURL, string inp_sceneName, int inp_pos1, int inp_pos2)
+        {
+            map.startPos = inp_pos1;
+            map.maxPos = inp_pos2;
+            map.sceneName = inp_sceneName;
+            map.videoName = inp_videoURL;
+        }
+
         public void Play()
         {
             subtitles.Text = "";
@@ -148,7 +156,8 @@ namespace ORA
             buttonPauseResume.Text = "Pause";
             subtitles.Enabled = false;
             player.URL = textBoxURL.Text;
-            labelTimer.Text = "0";
+            player.Ctlcontrols.currentPosition = map.startPos;
+            labelTimer.Text = map.startPos.ToString();
             UpdateEditorListBox();
 
             playState = EditorPlayState.Play;
@@ -179,7 +188,6 @@ namespace ORA
             {
                 subtitles.ForeColor = Color.Green;
                 subtitles.Text = str;
-                //7-11-12-8
             }
             labelTimer.Text = curPos.ToString();
         }
@@ -201,6 +209,18 @@ namespace ORA
             else
             {
                 subtitles.ForeColor = Color.Blue;
+            }
+        }
+
+        public void DeleteLine(string inp)
+        {
+            string s = inp.Remove(0, 1);
+            s = s.Remove(s.IndexOf(']'));
+            int ind;
+            if (Int32.TryParse(s, out ind) == true)
+            {
+                map.subtitles.Remove(ind);
+                UpdateEditorListBox();
             }
         }
 

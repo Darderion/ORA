@@ -148,5 +148,32 @@ namespace ORA
         {
             mapEditor.Scroll(-5);
         }
+
+        private void listBoxEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (listBoxEditor.SelectedIndex != -1)
+                {
+                    mapEditor.DeleteLine(listBoxEditor.Items[listBoxEditor.SelectedIndex].ToString());
+                }
+            }
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            if (editorPlayer.currentMedia != null)
+            {
+                using (var frm = new FormSaveMap())
+                {
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowXY(textBoxVideoURL.Text, (int)editorPlayer.currentMedia.duration - 1);
+                    if (frm.DialogResult == DialogResult.OK)
+                    {
+                        mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
+                    }
+                }
+            }
+        }
     }
 }
