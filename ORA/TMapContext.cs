@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,6 @@ namespace ORA
     class TMapContext : DbContext
     {
         public TMapContext() : base("DbConnection") { }
-        public DbSet<TMap> Maps { get; set; }
+        public DbSet<Map> Maps { get; set; }
     }
 }

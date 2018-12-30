@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ORA.TMapEditor;
 
 namespace ORA
 {
@@ -114,6 +113,29 @@ namespace ORA
                 .LabelForTimer(labelVideoTimer)
                 .TextBoxURL(textBoxVideoURL);
             mapEditor.AddHandlers();
+
+            try
+            {
+                using (var db = new TMapContext())
+                {
+                    db.Database.Delete();
+                    db.Database.CreateIfNotExists();
+
+                    Map map = new Map("Test Map", "JJS.mp4", 7, 160);
+                    map = map.AddSubtitle(0, "JJ1-0")
+                        .AddSubtitle(1, "JJ1-1")
+                        .AddSubtitle(4, "JJ1-4")
+                        .AddSubtitle(3, "JJ1-3");
+
+                    db.Maps.Add(map);
+                    db.SaveChanges();
+                    mapEditor.LoadMap("Test Map");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void editorTimer_Tick(object sender, EventArgs e)
@@ -158,6 +180,9 @@ namespace ORA
                     mapEditor.DeleteLine(listBoxEditor.Items[listBoxEditor.SelectedIndex].ToString());
                 }
             }
+            if (e.KeyCode == Keys.Enter)
+            {
+            }
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -171,6 +196,8 @@ namespace ORA
                     if (frm.DialogResult == DialogResult.OK)
                     {
                         mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
+                        mapEditor.LoadMap(frm.SceneName + "1");
+                        mapEditor.LoadMap(frm.SceneName);
                     }
                 }
             }

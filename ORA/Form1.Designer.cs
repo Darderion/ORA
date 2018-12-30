@@ -33,6 +33,7 @@
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buttonSave = new System.Windows.Forms.Button();
             this.buttonScroll5s2 = new System.Windows.Forms.Button();
             this.buttonEditorView = new System.Windows.Forms.Button();
             this.listBoxEditor = new System.Windows.Forms.ListBox();
@@ -46,7 +47,6 @@
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
-            this.buttonSave = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
@@ -94,6 +94,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(321, 52);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(48, 23);
+            this.buttonSave.TabIndex = 11;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // buttonScroll5s2
             // 
@@ -210,16 +220,6 @@
             // 
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.Location = new System.Drawing.Point(321, 52);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(48, 23);
-            this.buttonSave.TabIndex = 11;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // Form1
             // 
