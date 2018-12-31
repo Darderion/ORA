@@ -81,7 +81,7 @@ namespace ORA
 
         EditorViewState viewState = EditorViewState.Video;
         EditorPlayState playState = EditorPlayState.Pause;
-        TMap map = new TMap("JJV1", "C:\\Programming\\JJS.mp4", 162);
+        Map map = new Map("JJV1", "C:\\Programming\\JJS.mp4", 0, 162);
         public int curPos = 0;
 
         Button buttonPauseResume;
@@ -138,7 +138,19 @@ namespace ORA
         private void UpdateEditorListBox()
         {
             listBox.Items.Clear();
-            listBox.Items.AddRange(map.GetEditorList().ToArray());
+            listBox.Items.AddRange(GetEditorList().ToArray());
+        }
+
+        public void SetVideoTimer(int inp)
+        {
+            labelTimer.Text = inp.ToString();
+            player.Ctlcontrols.currentPosition = inp;
+            player.Ctlcontrols.play();
+            player.Ctlcontrols.pause();
+            if (map.dict.ContainsKey(inp))
+                subtitles.Text = map.dict[inp];
+            else
+                subtitles.Text = "";
         }
 
         public void Play()
@@ -148,7 +160,8 @@ namespace ORA
             buttonPauseResume.Text = "Pause";
             subtitles.Enabled = false;
             player.URL = textBoxURL.Text;
-            labelTimer.Text = "0";
+            player.Ctlcontrols.currentPosition = map.startPos;
+            labelTimer.Text = map.startPos.ToString();
             UpdateEditorListBox();
 
             playState = EditorPlayState.Play;
@@ -157,15 +170,13 @@ namespace ORA
         public void Scroll(int inp)
         {
             player.Ctlcontrols.currentPosition += inp;
-            player.Ctlcontrols.play();
-            player.Ctlcontrols.pause();
             curPos = (int)player.Ctlcontrols.currentPosition;
-            labelTimer.Text = curPos.ToString();
+            SetVideoTimer(curPos);
         }
 
         public void SaveLine()
         {
-            map.subtitles[curPos] = subtitles.Text;
+            map.dict[curPos] = subtitles.Text;
             subtitles.ForeColor = Color.Green;
             UpdateEditorListBox();
         }
@@ -175,19 +186,64 @@ namespace ORA
             double timer_curPos = player.Ctlcontrols.currentPosition;
             curPos = (int)timer_curPos;
             string str;
-            if (map.subtitles.TryGetValue(curPos, out str) == true)
+            if (map.dict.TryGetValue(curPos, out str) == true)
             {
                 subtitles.ForeColor = Color.Green;
                 subtitles.Text = str;
-                //7-11-12-8
             }
             labelTimer.Text = curPos.ToString();
+        }
+
+
+
+        public bool LoadMap(string inp)
+        {
+            if (Map.Load(inp) != null)
+            {
+                map = Map.Load(inp);
+                UpdateEditorListBox();
+                return true;
+            }
+            return false;
+        }
+
+        public bool Save(string inp_VideoName, string inp_SceneName, int pos1, int pos2)
+        {
+            map.Name = inp_SceneName;
+            map.VideoURL = inp_VideoName;
+            map.startPos = pos1;
+            map.finishPos = pos2;
+            return Save();
+        }
+
+        public bool Save()
+        {
+            try
+            {
+                using (var db = new TMapContext())
+                {
+                    map.subtitles.Clear();
+                    foreach(var line in map.dict)
+                    {
+                        map.subtitles.Add(new Subtitle(line.Key, line.Value));
+                    }
+                    db.Maps.Add(map);
+                    db.SaveChanges();
+                    MessageBox.Show("Saved successfully");
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            return false;
         }
 
         public void subtitles_line_changed()
         {
             string str;
-            if (map.subtitles.TryGetValue(curPos, out str) == true)
+            if (map.dict.TryGetValue(curPos, out str) == true)
             {
                 if (subtitles.Text == str)
                 {
@@ -201,6 +257,18 @@ namespace ORA
             else
             {
                 subtitles.ForeColor = Color.Blue;
+            }
+        }
+
+        public void DeleteLine(string inp)
+        {
+            string s = inp.Remove(0, 1);
+            s = s.Remove(s.IndexOf(']'));
+            int ind;
+            if (Int32.TryParse(s, out ind) == true)
+            {
+                map.dict.Remove(ind);
+                UpdateEditorListBox();
             }
         }
 
@@ -226,6 +294,19 @@ namespace ORA
         private void buttonResumePause_Click(object sender, EventArgs e)
         {
             ChangePlayState();
+        }
+
+        public List<string> GetEditorList()
+        {
+            List<string> res = new List<string>();
+            for (int i = 0; i < map.finishPos; i++)
+            {
+                if (map.dict.ContainsKey(i) == true)
+                {
+                    res.Add("[" + i + "] " + map.dict[i]);
+                }
+            }
+            return res;
         }
     }
 }

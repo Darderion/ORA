@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static ORA.TMapEditor;
 
 namespace ORA
 {
@@ -85,7 +84,7 @@ namespace ORA
 
             textBoxVideoURL.Left = editorPlayer.Left;
             textBoxSubtitle.Left = editorPlayer.Left + 80;
-            textBoxVideoURL.Width = tabPage2.Width - 50;
+            textBoxVideoURL.Width = tabPage2.Width - 50 - 170;
             textBoxSubtitle.Width = textBoxVideoURL.Width + editorPlayer.Left - textBoxSubtitle.Left;
             textBoxSubtitle.Top = editorPlayer.Top + editorPlayer.Height + 10;
             labelVideoTimer.Left = editorPlayer.Left;
@@ -114,6 +113,36 @@ namespace ORA
                 .LabelForTimer(labelVideoTimer)
                 .TextBoxURL(textBoxVideoURL);
             mapEditor.AddHandlers();
+
+            try
+            {
+                using (var db = new TMapContext())
+                {
+                    db.Database.Delete();
+                    db.Database.CreateIfNotExists();
+
+                    Map map = new Map("Test Map", "JJS.mp4", 7, 160);
+                    map = map.AddSubtitle(0, "JJ1-0")
+                        .AddSubtitle(1, "JJ1-1")
+                        .AddSubtitle(4, "JJ1-4")
+                        .AddSubtitle(3, "JJ1-3");
+                    db.Maps.Add(map);
+
+                    map = new Map("Test Map 2", "JJS.mp4", 0, 162);
+                    map = map.AddSubtitle(0, "0")
+                        .AddSubtitle(1, "1")
+                        .AddSubtitle(5, "5")
+                        .AddSubtitle(7, "7");
+                    db.Maps.Add(map);
+
+                    db.SaveChanges();
+                    mapEditor.LoadMap("Test Map");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void editorTimer_Tick(object sender, EventArgs e)
@@ -147,6 +176,49 @@ namespace ORA
         private void buttonScroll5s_Click(object sender, EventArgs e)
         {
             mapEditor.Scroll(-5);
+        }
+
+        private void listBoxEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (listBoxEditor.SelectedIndex != -1)
+                {
+                    mapEditor.DeleteLine(listBoxEditor.Items[listBoxEditor.SelectedIndex].ToString());
+                }
+            }
+            if (e.KeyCode == Keys.Enter)
+            {
+            }
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            if (editorPlayer.currentMedia != null)
+            {
+                using (var frm = new FormSaveMap())
+                {
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowXY(textBoxVideoURL.Text, (int)editorPlayer.currentMedia.duration - 1);
+                    if (frm.DialogResult == DialogResult.OK)
+                    {
+                        mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
+                        mapEditor.LoadMap(frm.SceneName + "1");
+                        mapEditor.LoadMap(frm.SceneName);
+                    }
+                }
+            }
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FormLoadMap())
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    mapEditor.LoadMap(frm.currentMap.Name);
+                }
+            }
         }
     }
 }

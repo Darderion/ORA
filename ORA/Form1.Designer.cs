@@ -33,6 +33,7 @@
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buttonSave = new System.Windows.Forms.Button();
             this.buttonScroll5s2 = new System.Windows.Forms.Button();
             this.buttonEditorView = new System.Windows.Forms.Button();
             this.listBoxEditor = new System.Windows.Forms.ListBox();
@@ -46,6 +47,7 @@
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
+            this.buttonLoad = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
@@ -74,6 +76,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.buttonLoad);
+            this.tabPage2.Controls.Add(this.buttonSave);
             this.tabPage2.Controls.Add(this.buttonScroll5s2);
             this.tabPage2.Controls.Add(this.buttonEditorView);
             this.tabPage2.Controls.Add(this.listBoxEditor);
@@ -93,11 +97,21 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(321, 52);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(48, 23);
+            this.buttonSave.TabIndex = 11;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
             // buttonScroll5s2
             // 
             this.buttonScroll5s2.Location = new System.Drawing.Point(221, 52);
             this.buttonScroll5s2.Name = "buttonScroll5s2";
-            this.buttonScroll5s2.Size = new System.Drawing.Size(57, 23);
+            this.buttonScroll5s2.Size = new System.Drawing.Size(40, 23);
             this.buttonScroll5s2.TabIndex = 10;
             this.buttonScroll5s2.Text = "<<<";
             this.buttonScroll5s2.UseVisualStyleBackColor = true;
@@ -105,9 +119,9 @@
             // 
             // buttonEditorView
             // 
-            this.buttonEditorView.Location = new System.Drawing.Point(284, 52);
+            this.buttonEditorView.Location = new System.Drawing.Point(267, 52);
             this.buttonEditorView.Name = "buttonEditorView";
-            this.buttonEditorView.Size = new System.Drawing.Size(57, 23);
+            this.buttonEditorView.Size = new System.Drawing.Size(48, 23);
             this.buttonEditorView.TabIndex = 9;
             this.buttonEditorView.Text = "Video";
             this.buttonEditorView.UseVisualStyleBackColor = true;
@@ -121,6 +135,7 @@
             this.listBoxEditor.Size = new System.Drawing.Size(120, 95);
             this.listBoxEditor.TabIndex = 8;
             this.listBoxEditor.Visible = false;
+            this.listBoxEditor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxEditor_KeyDown);
             // 
             // buttonScroll1s
             // 
@@ -208,6 +223,16 @@
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
             // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(321, 23);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(48, 23);
+            this.buttonLoad.TabIndex = 12;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,6 +268,8 @@
         private System.Windows.Forms.Button buttonEditorView;
         private System.Windows.Forms.ListBox listBoxEditor;
         private System.Windows.Forms.Button buttonScroll5s2;
+        private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonLoad;
     }
 }
 
