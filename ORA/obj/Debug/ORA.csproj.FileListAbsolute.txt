@@ -17,3 +17,4 @@ C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\EntityFramework.xml
 C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.FormSaveMap.resources
+C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.FormLoadMap.resources

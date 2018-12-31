@@ -62,6 +62,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormLoadMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLoadMap.Designer.cs">
+      <DependentUpon>FormLoadMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormSaveMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +81,9 @@
     <Compile Include="TMapEditor.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLoadMap.resx">
+      <DependentUpon>FormLoadMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSaveMap.resx">
       <DependentUpon>FormSaveMap.cs</DependentUpon>

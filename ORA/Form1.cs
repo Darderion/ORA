@@ -84,7 +84,7 @@ namespace ORA
 
             textBoxVideoURL.Left = editorPlayer.Left;
             textBoxSubtitle.Left = editorPlayer.Left + 80;
-            textBoxVideoURL.Width = tabPage2.Width - 50;
+            textBoxVideoURL.Width = tabPage2.Width - 50 - 170;
             textBoxSubtitle.Width = textBoxVideoURL.Width + editorPlayer.Left - textBoxSubtitle.Left;
             textBoxSubtitle.Top = editorPlayer.Top + editorPlayer.Height + 10;
             labelVideoTimer.Left = editorPlayer.Left;
@@ -126,8 +126,15 @@ namespace ORA
                         .AddSubtitle(1, "JJ1-1")
                         .AddSubtitle(4, "JJ1-4")
                         .AddSubtitle(3, "JJ1-3");
-
                     db.Maps.Add(map);
+
+                    map = new Map("Test Map 2", "JJS.mp4", 0, 162);
+                    map = map.AddSubtitle(0, "0")
+                        .AddSubtitle(1, "1")
+                        .AddSubtitle(5, "5")
+                        .AddSubtitle(7, "7");
+                    db.Maps.Add(map);
+
                     db.SaveChanges();
                     mapEditor.LoadMap("Test Map");
                 }
@@ -199,6 +206,17 @@ namespace ORA
                         mapEditor.LoadMap(frm.SceneName + "1");
                         mapEditor.LoadMap(frm.SceneName);
                     }
+                }
+            }
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FormLoadMap())
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    mapEditor.LoadMap(frm.currentMap.Name);
                 }
             }
         }
