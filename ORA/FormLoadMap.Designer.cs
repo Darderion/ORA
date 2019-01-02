@@ -37,6 +37,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.buttonPlay = new System.Windows.Forms.Button();
             this.labelLoadMaps = new System.Windows.Forms.Label();
+            this.buttonDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -120,12 +121,23 @@
             this.labelLoadMaps.TabIndex = 10;
             this.labelLoadMaps.Text = "List of Maps";
             // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Location = new System.Drawing.Point(12, 566);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(325, 42);
+            this.buttonDelete.TabIndex = 11;
+            this.buttonDelete.Text = "Delete map";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
             // FormLoadMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(21F, 34F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(695, 583);
+            this.ClientSize = new System.Drawing.Size(695, 618);
+            this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.labelLoadMaps);
             this.Controls.Add(this.buttonPlay);
             this.Controls.Add(this.button1);
@@ -156,5 +168,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buttonPlay;
         private System.Windows.Forms.Label labelLoadMaps;
+        private System.Windows.Forms.Button buttonDelete;
     }
 }

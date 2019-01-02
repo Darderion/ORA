@@ -60,6 +60,23 @@ namespace ORA
             }
             return loaded_map;
         }
+
+        public static bool Delete(string inp)
+        {
+            try
+            {
+                using (var db = new TMapContext())
+                {
+                    db.Maps.Remove(db.Maps.Where(o => o.Name == inp).FirstOrDefault());
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
     }
 
     [Table("ORA_Table_Subtitle")]

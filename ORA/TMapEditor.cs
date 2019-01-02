@@ -135,6 +135,17 @@ namespace ORA
             return playState;
         }
 
+        public void Pause()
+        {
+            player.Ctlcontrols.play();
+            player.Ctlcontrols.pause();
+            timerTick();
+            if (playState == EditorPlayState.Play)
+            {
+                ChangePlayState();
+            }
+        }
+
         private void UpdateEditorListBox()
         {
             listBox.Items.Clear();
@@ -193,8 +204,6 @@ namespace ORA
             }
             labelTimer.Text = curPos.ToString();
         }
-
-
 
         public bool LoadMap(string inp)
         {

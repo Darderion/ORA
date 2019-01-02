@@ -41,7 +41,7 @@ namespace ORA
             }
         }
 
-        private void FormLoadMap_Load(object sender, EventArgs e)
+        public void UpdateMapList()
         {
             listBoxMaps.Items.Clear();
             listBoxSubtitles.Items.Clear();
@@ -50,8 +50,13 @@ namespace ORA
                 maps = db.Maps.ToList();
                 ShowListMaps();
             }
-            currentMap = new Map();
             currentMap.Name = "None";
+        }
+
+        private void FormLoadMap_Load(object sender, EventArgs e)
+        {
+            currentMap = new Map();
+            UpdateMapList();
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -91,6 +96,19 @@ namespace ORA
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             editorPlayer.Ctlcontrols.play();
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            if (listBoxMaps.SelectedIndex != -1)
+            {
+                DialogResult dialogResult = MessageBox.Show("Are you sure?", "Delete map", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    if (Map.Delete(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString()) == true)
+                        UpdateMapList();
+                }
+            }
         }
     }
 }

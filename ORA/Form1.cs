@@ -220,5 +220,20 @@ namespace ORA
                 }
             }
         }
+
+        private void listBoxEditor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxEditor.SelectedIndex != -1)
+            {
+                int ind = 0;
+                string line = listBoxEditor.Items[listBoxEditor.SelectedIndex].ToString();
+                line = line.Remove(line.IndexOf(']')).Remove(0, 1);
+                if (Int32.TryParse(line, out ind) == true)
+                {
+                    editorPlayer.Ctlcontrols.currentPosition = ind;
+                    mapEditor.Pause();
+                }
+            }
+        }
     }
 }

@@ -33,6 +33,7 @@
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonScroll5s2 = new System.Windows.Forms.Button();
             this.buttonEditorView = new System.Windows.Forms.Button();
@@ -47,7 +48,6 @@
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
-            this.buttonLoad = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
@@ -97,6 +97,16 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(321, 23);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(48, 23);
+            this.buttonLoad.TabIndex = 12;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
             // buttonSave
             // 
             this.buttonSave.Location = new System.Drawing.Point(321, 52);
@@ -135,6 +145,7 @@
             this.listBoxEditor.Size = new System.Drawing.Size(120, 95);
             this.listBoxEditor.TabIndex = 8;
             this.listBoxEditor.Visible = false;
+            this.listBoxEditor.SelectedIndexChanged += new System.EventHandler(this.listBoxEditor_SelectedIndexChanged);
             this.listBoxEditor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxEditor_KeyDown);
             // 
             // buttonScroll1s
@@ -222,16 +233,6 @@
             // 
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
-            // 
-            // buttonLoad
-            // 
-            this.buttonLoad.Location = new System.Drawing.Point(321, 23);
-            this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(48, 23);
-            this.buttonLoad.TabIndex = 12;
-            this.buttonLoad.Text = "Load";
-            this.buttonLoad.UseVisualStyleBackColor = true;
-            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
             // Form1
             // 
