@@ -61,9 +61,9 @@ namespace ORA
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Map map = Map.Load(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString());
             if(listBoxMaps.SelectedIndex != -1)
             {
+                Map map = Map.Load(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString());
                 if (File.Exists(map.VideoURL) == true)
                 {
                     editorPlayer.URL = map.VideoURL;

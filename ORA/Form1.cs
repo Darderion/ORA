@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -87,9 +88,9 @@ namespace ORA
             textBoxVideoURL.Width = tabPage2.Width - 50 - 170;
             textBoxSubtitle.Width = textBoxVideoURL.Width + editorPlayer.Left - textBoxSubtitle.Left;
             textBoxSubtitle.Top = editorPlayer.Top + editorPlayer.Height + 10;
-            labelVideoTimer.Left = editorPlayer.Left;
-            labelVideoTimer.Top = textBoxSubtitle.Top;
-            labelVideoTimer.Text = "";
+            textBoxVideoTimer.Left = editorPlayer.Left;
+            textBoxVideoTimer.Top = textBoxSubtitle.Top;
+            textBoxVideoTimer.Text = "";
 
             listBoxEditor.Width = editorPlayer.Width;
             listBoxEditor.Height = editorPlayer.Height;
@@ -107,13 +108,26 @@ namespace ORA
                 .Player(editorPlayer)
                 .Timer(editorTimer)
                 .PauseResume(buttonResumePause)
+                .Load(buttonLoad)
+                .Save(buttonSave)
                 .ListBox(listBoxEditor)
                 .View(buttonEditorView)
                 .Subtitles(textBoxSubtitle)
-                .LabelForTimer(labelVideoTimer)
+                .LabelForTimer(textBoxVideoTimer)
                 .TextBoxURL(textBoxVideoURL);
             mapEditor.AddHandlers();
+            mapEditor.ChangeDBConnectionState(false);
 
+            DB_Init_ASync();
+        }
+
+        public async Task DB_Init_ASync()
+        {
+            await Task.Run(Init_ASync);
+        }
+
+        public async Task Init_ASync()
+        {
             try
             {
                 using (var db = new TMapContext())
@@ -136,10 +150,10 @@ namespace ORA
                     db.Maps.Add(map);
 
                     db.SaveChanges();
-                    mapEditor.LoadMap("Test Map");
+                    mapEditor.ChangeDBConnectionState(true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -214,6 +228,7 @@ namespace ORA
         {
             using (var frm = new FormLoadMap())
             {
+                frm.StartPosition = FormStartPosition.CenterParent;
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     mapEditor.LoadMap(frm.currentMap.Name);

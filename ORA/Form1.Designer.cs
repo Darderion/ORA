@@ -40,7 +40,6 @@
             this.listBoxEditor = new System.Windows.Forms.ListBox();
             this.buttonScroll1s = new System.Windows.Forms.Button();
             this.textBoxSubtitle = new System.Windows.Forms.TextBox();
-            this.labelVideoTimer = new System.Windows.Forms.Label();
             this.editorPlayer = new AxWMPLib.AxWindowsMediaPlayer();
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonResumePause = new System.Windows.Forms.Button();
@@ -48,6 +47,7 @@
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
+            this.textBoxVideoTimer = new System.Windows.Forms.TextBox();
             this.mainTabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
@@ -76,6 +76,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.textBoxVideoTimer);
             this.tabPage2.Controls.Add(this.buttonLoad);
             this.tabPage2.Controls.Add(this.buttonSave);
             this.tabPage2.Controls.Add(this.buttonScroll5s2);
@@ -83,7 +84,6 @@
             this.tabPage2.Controls.Add(this.listBoxEditor);
             this.tabPage2.Controls.Add(this.buttonScroll1s);
             this.tabPage2.Controls.Add(this.textBoxSubtitle);
-            this.tabPage2.Controls.Add(this.labelVideoTimer);
             this.tabPage2.Controls.Add(this.editorPlayer);
             this.tabPage2.Controls.Add(this.buttonPlay);
             this.tabPage2.Controls.Add(this.buttonResumePause);
@@ -168,15 +168,6 @@
             this.textBoxSubtitle.TextChanged += new System.EventHandler(this.textBoxSubtitle_TextChanged);
             this.textBoxSubtitle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxSubtitle_KeyDown);
             // 
-            // labelVideoTimer
-            // 
-            this.labelVideoTimer.AutoSize = true;
-            this.labelVideoTimer.Location = new System.Drawing.Point(6, 481);
-            this.labelVideoTimer.Name = "labelVideoTimer";
-            this.labelVideoTimer.Size = new System.Drawing.Size(31, 13);
-            this.labelVideoTimer.TabIndex = 5;
-            this.labelVideoTimer.Text = "$$$$";
-            // 
             // editorPlayer
             // 
             this.editorPlayer.Enabled = true;
@@ -234,6 +225,14 @@
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
             // 
+            // textBoxVideoTimer
+            // 
+            this.textBoxVideoTimer.Enabled = false;
+            this.textBoxVideoTimer.Location = new System.Drawing.Point(6, 481);
+            this.textBoxVideoTimer.Name = "textBoxVideoTimer";
+            this.textBoxVideoTimer.Size = new System.Drawing.Size(28, 20);
+            this.textBoxVideoTimer.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -263,7 +262,6 @@
         private System.Windows.Forms.Button buttonPlay;
         private AxWMPLib.AxWindowsMediaPlayer editorPlayer;
         private System.Windows.Forms.TextBox textBoxSubtitle;
-        private System.Windows.Forms.Label labelVideoTimer;
         private System.Windows.Forms.Timer editorTimer;
         private System.Windows.Forms.Button buttonScroll1s;
         private System.Windows.Forms.Button buttonEditorView;
@@ -271,6 +269,7 @@
         private System.Windows.Forms.Button buttonScroll5s2;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.TextBox textBoxVideoTimer;
     }
 }
 

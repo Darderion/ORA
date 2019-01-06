@@ -34,6 +34,16 @@ namespace ORA
                 mapEditor.buttonView = inp_button;
                 return this;
             }
+            public TMapEditorBuilder Load(Button inp_button)
+            {
+                mapEditor.buttonLoad = inp_button;
+                return this;
+            }
+            public TMapEditorBuilder Save(Button inp_button)
+            {
+                mapEditor.buttonSave = inp_button;
+                return this;
+            }
             public TMapEditorBuilder Timer(Timer inp_timer)
             {
                 mapEditor.timer = inp_timer;
@@ -54,9 +64,9 @@ namespace ORA
                 mapEditor.subtitles = inp_textBox;
                 return this;
             }
-            public TMapEditorBuilder LabelForTimer(Label inp_label)
+            public TMapEditorBuilder LabelForTimer(TextBox inp_textBox)
             {
-                mapEditor.labelTimer = inp_label;
+                mapEditor.textBoxTimer = inp_textBox;
                 return this;
             }
             public TMapEditorBuilder TextBoxURL(TextBox inp_textBox)
@@ -79,6 +89,8 @@ namespace ORA
         public enum EditorViewState { Video, List };
         public enum EditorPlayState { Play, Pause };
 
+        //Variables
+
         EditorViewState viewState = EditorViewState.Video;
         EditorPlayState playState = EditorPlayState.Pause;
         Map map = new Map("JJV1", "C:\\Programming\\JJS.mp4", 0, 162);
@@ -87,12 +99,55 @@ namespace ORA
         Button buttonPauseResume;
         Button buttonPlay;
         Button buttonView;
+        Button buttonLoad;
+        Button buttonSave;
+        TextBox textBoxTimer;
         Timer timer;
         AxWindowsMediaPlayer player;
         ListBox listBox;
         TextBox subtitles;
-        Label labelTimer;
         TextBox textBoxURL;
+
+        bool isConnectedToDB = false;
+
+        //Methods
+
+        public bool ChangeDBConnectionState()
+        {
+            return ChangeDBConnectionState(!isConnectedToDB);
+        }
+
+        public bool ChangeDBConnectionState(bool isConnected)
+        {
+            isConnectedToDB = isConnected;
+            if (isConnectedToDB == false)
+            {
+                buttonSave.BeginInvoke((MethodInvoker)(() =>
+                {
+                    buttonLoad.Enabled = false;
+                    buttonLoad.Text = "Connecting...";
+                    buttonLoad.Font = new Font("Splash", 12, FontStyle.Italic);
+
+                    buttonSave.Enabled = false;
+                    buttonSave.Text = "Connecting...";
+                    buttonSave.Font = new Font("Splash", 12, FontStyle.Italic);
+                }));
+            }
+            else
+            {
+                buttonSave.BeginInvoke((MethodInvoker)(() =>
+                {
+                    buttonLoad.Enabled = true;
+                    buttonLoad.Text = "Load";
+                    buttonLoad.Font = buttonLoad.Parent.Font;
+
+                    buttonSave.Enabled = true;
+                    buttonSave.Text = "Save";
+                    buttonSave.Font = buttonSave.Parent.Font;
+                }));
+            }
+            return isConnectedToDB;
+        }
 
         public EditorViewState ChangeViewState()
         {
@@ -154,7 +209,7 @@ namespace ORA
 
         public void SetVideoTimer(int inp)
         {
-            labelTimer.Text = inp.ToString();
+            textBoxTimer.Text = inp.ToString();
             player.Ctlcontrols.currentPosition = inp;
             player.Ctlcontrols.play();
             player.Ctlcontrols.pause();
@@ -172,7 +227,7 @@ namespace ORA
             subtitles.Enabled = false;
             player.URL = textBoxURL.Text;
             player.Ctlcontrols.currentPosition = map.startPos;
-            labelTimer.Text = map.startPos.ToString();
+            textBoxTimer.Text = map.startPos.ToString();
             UpdateEditorListBox();
 
             playState = EditorPlayState.Play;
@@ -202,7 +257,7 @@ namespace ORA
                 subtitles.ForeColor = Color.Green;
                 subtitles.Text = str;
             }
-            labelTimer.Text = curPos.ToString();
+            textBoxTimer.Text = curPos.ToString();
         }
 
         public bool LoadMap(string inp)
@@ -287,6 +342,7 @@ namespace ORA
         {
             buttonPlay.Click += buttonPlay_Click;
             buttonPauseResume.Click += buttonResumePause_Click;
+            textBoxTimer.TextChanged += textBoxVideoTimer_TextChanged;
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
@@ -303,6 +359,21 @@ namespace ORA
         private void buttonResumePause_Click(object sender, EventArgs e)
         {
             ChangePlayState();
+        }
+
+        private void textBoxVideoTimer_TextChanged(object sender, EventArgs e)
+        {
+            if (playState == EditorPlayState.Play) return;
+            int pos;
+            if (Int32.TryParse(textBoxTimer.Text, out pos) == true)
+            {
+                textBoxTimer.ForeColor = Color.Black;
+                SetVideoTimer(pos);
+            }
+            else
+            {
+                textBoxTimer.ForeColor = Color.Red;
+            }
         }
 
         public List<string> GetEditorList()
