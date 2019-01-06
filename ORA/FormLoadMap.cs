@@ -1,4 +1,5 @@
 ﻿using AxWMPLib;
+using ORA.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,7 @@ namespace ORA
     {
         List<Map> maps;
         public Map currentMap;
+        public IMapStorage mapStorage = new MapsDB();
 
         public FormLoadMap()
         {
@@ -63,7 +65,7 @@ namespace ORA
         {
             if(listBoxMaps.SelectedIndex != -1)
             {
-                Map map = MapsDB.Load(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString());
+                Map map = mapStorage.Load(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString());
                 if (File.Exists(map.VideoURL) == true)
                 {
                     editorPlayer.URL = map.VideoURL;
@@ -105,7 +107,7 @@ namespace ORA
                 DialogResult dialogResult = MessageBox.Show("Are you sure?", "Delete map", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    if (MapsDB.Delete(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString()) == true)
+                    if (mapStorage.Delete(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString()) == true)
                         UpdateMapList();
                 }
             }

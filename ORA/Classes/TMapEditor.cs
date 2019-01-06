@@ -1,4 +1,5 @@
 ﻿using AxWMPLib;
+using ORA.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -90,6 +91,8 @@ namespace ORA
         public enum EditorPlayState { Play, Pause };
 
         //Variables
+
+        public IMapStorage mapStorage = new MapsDB();
 
         EditorViewState viewState = EditorViewState.Video;
         EditorPlayState playState = EditorPlayState.Pause;
@@ -262,9 +265,9 @@ namespace ORA
 
         public bool LoadMap(string inp)
         {
-            if (MapsDB.Load(inp) != null)
+            if (mapStorage.Load(inp) != null)
             {
-                map = MapsDB.Load(inp);
+                map = mapStorage.Load(inp);
                 UpdateEditorListBox();
                 return true;
             }
@@ -277,7 +280,7 @@ namespace ORA
             map.VideoURL = inp_VideoName;
             map.startPos = pos1;
             map.finishPos = pos2;
-            return MapsDB.Save(map);
+            return mapStorage.Save(map);
         }
 
         public void subtitles_line_changed()

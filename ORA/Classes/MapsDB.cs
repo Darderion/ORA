@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ORA.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +8,9 @@ using System.Windows.Forms;
 
 namespace ORA
 {
-    class MapsDB
+    class MapsDB : IMapStorage
     {
-        public static Map Load(string inp)
+        public Map Load(string inp)
         {
             Map loaded_map = new Map();
             try
@@ -35,7 +36,7 @@ namespace ORA
             return loaded_map;
         }
 
-        public static bool Delete(string inp)
+        public bool Delete(string inp)
         {
             try
             {
@@ -53,7 +54,7 @@ namespace ORA
             }
         }
 
-        public static bool Save(Map map)
+        public bool Save(Map map)
         {
             try
             {
