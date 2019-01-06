@@ -63,7 +63,7 @@ namespace ORA
         {
             if(listBoxMaps.SelectedIndex != -1)
             {
-                Map map = Map.Load(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString());
+                Map map = MapsDB.Load(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString());
                 if (File.Exists(map.VideoURL) == true)
                 {
                     editorPlayer.URL = map.VideoURL;
@@ -105,7 +105,7 @@ namespace ORA
                 DialogResult dialogResult = MessageBox.Show("Are you sure?", "Delete map", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    if (Map.Delete(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString()) == true)
+                    if (MapsDB.Delete(listBoxMaps.Items[listBoxMaps.SelectedIndex].ToString()) == true)
                         UpdateMapList();
                 }
             }

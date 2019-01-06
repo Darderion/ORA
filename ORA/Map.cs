@@ -41,42 +41,6 @@ namespace ORA
             this.subtitles.Add(new Subtitle(inp_pos, inp_text));
             return this;
         }
-
-        public static Map Load(string inp)
-        {
-            Map loaded_map = new Map();
-            using (var db = new TMapContext())
-            {
-                var maps = db.Maps.ToList();
-                loaded_map = maps.Where(o => o.Name == inp).FirstOrDefault();
-                if (loaded_map != null)
-                {
-                    loaded_map.dict = new Dictionary<int, string>();
-                    foreach (var line in loaded_map.subtitles)
-                    {
-                        loaded_map.dict.Add(line.pos, line.text);
-                    }
-                }
-            }
-            return loaded_map;
-        }
-
-        public static bool Delete(string inp)
-        {
-            try
-            {
-                using (var db = new TMapContext())
-                {
-                    db.Maps.Remove(db.Maps.Where(o => o.Name == inp).FirstOrDefault());
-                    db.SaveChanges();
-                    return true;
-                }
-            }
-            catch(Exception e)
-            {
-                return false;
-            }
-        }
     }
 
     [Table("ORA_Table_Subtitle")]

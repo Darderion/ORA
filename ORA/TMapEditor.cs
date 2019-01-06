@@ -262,9 +262,9 @@ namespace ORA
 
         public bool LoadMap(string inp)
         {
-            if (Map.Load(inp) != null)
+            if (MapsDB.Load(inp) != null)
             {
-                map = Map.Load(inp);
+                map = MapsDB.Load(inp);
                 UpdateEditorListBox();
                 return true;
             }
@@ -277,31 +277,7 @@ namespace ORA
             map.VideoURL = inp_VideoName;
             map.startPos = pos1;
             map.finishPos = pos2;
-            return Save();
-        }
-
-        public bool Save()
-        {
-            try
-            {
-                using (var db = new TMapContext())
-                {
-                    map.subtitles.Clear();
-                    foreach(var line in map.dict)
-                    {
-                        map.subtitles.Add(new Subtitle(line.Key, line.Value));
-                    }
-                    db.Maps.Add(map);
-                    db.SaveChanges();
-                    MessageBox.Show("Saved successfully");
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            return false;
+            return MapsDB.Save(map);
         }
 
         public void subtitles_line_changed()
