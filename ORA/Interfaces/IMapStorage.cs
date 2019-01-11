@@ -10,7 +10,7 @@ namespace ORA
     {
         Map Load(string inp);
         bool Delete(string inp);
-        bool Save(Map map);
+        bool Save(IMap map);
         List<Map> GetListOfMaps();
     }
 }

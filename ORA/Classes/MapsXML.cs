@@ -32,7 +32,7 @@ namespace ORA
                 public string text;
             }
 
-            public MapRepresentation(Map map)
+            public MapRepresentation(IMap map)
             {
                 Name = map.Name;
                 VideoURL = map.VideoURL;
@@ -100,7 +100,7 @@ namespace ORA
             }
         }
 
-        public bool Save(Map map)
+        public bool Save(IMap map)
         {
             try
             {

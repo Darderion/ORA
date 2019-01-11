@@ -21,7 +21,7 @@ namespace ORA
             dict = new Dictionary<int, string>();
         }
 
-        public Dictionary<int, string> dict;
+        public Dictionary<int, string> dict { get; set; }
         public string Name { get; set; }
         public string VideoURL { get; set; }
         public int startPos { get; set; }

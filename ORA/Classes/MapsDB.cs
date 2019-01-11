@@ -17,7 +17,7 @@ namespace ORA
         {
             public MapRepresentation() { }
 
-            public MapRepresentation(Map map)
+            public MapRepresentation(IMap map)
             {
                 Name = map.Name;
                 VideoURL = map.VideoURL;
@@ -47,7 +47,6 @@ namespace ORA
             {
                 pos = inp_pos;
                 text = inp_text;
-                //MapRepresentation map = new MapRepresentation();
             }
 
             public Subtitle() { }
@@ -79,7 +78,6 @@ namespace ORA
                 var maps = db.Maps.Include(s => s.subtitles);
                 foreach(var map in maps)
                 {
-                    MessageBox.Show(map.Name + " : " + map.subtitles.Count);
                     res.Add(getMap(map));
                 }
             }
@@ -100,7 +98,6 @@ namespace ORA
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.Message);
                 return null;
             }
         }
@@ -118,12 +115,11 @@ namespace ORA
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
                 return false;
             }
         }
 
-        public bool Save(Map inp_map)
+        public bool Save(IMap inp_map)
         {
             try
             {
@@ -137,9 +133,8 @@ namespace ORA
             }
             catch (Exception e)
             {
-                MessageBox.Show("Save error : "+e.Message);
+                return false;
             }
-            return false;
         }
     }
 }

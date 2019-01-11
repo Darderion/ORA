@@ -8,6 +8,12 @@ namespace ORA
 {
     public interface IMap
     {
+        Dictionary<int, string> dict { get; set; }
+        string Name { get; set; }
+        string VideoURL { get; set; }
+        int startPos { get; set; }
+        int finishPos { get; set; }
+
         IMap AddSubtitle(int pos, string text);
     }
 }
