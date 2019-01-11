@@ -76,6 +76,7 @@
     <Compile Include="FormSaveMap.Designer.cs">
       <DependentUpon>FormSaveMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IMap.cs" />
     <Compile Include="Interfaces\IMapStorage.cs" />
     <Compile Include="Classes\Map.cs" />
     <Compile Include="Classes\MapsDB.cs" />

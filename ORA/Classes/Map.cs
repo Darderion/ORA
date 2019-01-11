@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ORA
 {
     [Table("ORA_Table_Map")]
-    public class Map
+    public class Map : IMap
     {
         public Map()
         {
@@ -36,10 +36,15 @@ namespace ORA
 
         public virtual ICollection<Subtitle> subtitles { get; set; }
 
-        public Map AddSubtitle(int inp_pos, string inp_text)
+        public Map AddSubtitles(int inp_pos, string inp_text)
+        {
+            AddSubtitle(inp_pos, inp_text);
+            return this;
+        }
+
+        public void AddSubtitle(int inp_pos, string inp_text)
         {
             this.subtitles.Add(new Subtitle(inp_pos, inp_text));
-            return this;
         }
 
         public override string ToString()

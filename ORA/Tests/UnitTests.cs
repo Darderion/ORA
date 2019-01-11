@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ORA.Classes;
 
 namespace ORA.Tests
 {
@@ -15,9 +14,9 @@ namespace ORA.Tests
         public void Map_AddSubtitles_DictCount()
         {
             Map map = (new Map("Test name 1", "Test video URL 1", 10, 20))
-                .AddSubtitle(3, "Test 3 (1)")
-                .AddSubtitle(5, "Test 5 (2)")
-                .AddSubtitle(8, "Test 8 (3)");
+                .AddSubtitles(3, "Test 3 (1)")
+                .AddSubtitles(5, "Test 5 (2)")
+                .AddSubtitles(8, "Test 8 (3)");
             Assert.AreEqual(3, map.dict.Count);
         }
 
@@ -25,9 +24,9 @@ namespace ORA.Tests
         public void Map_AddSubtitles_SubtitlesCount()
         {
             Map map = (new Map("Test name 1", "Test video URL 1", 10, 20))
-                .AddSubtitle(3, "Test 3 (1)")
-                .AddSubtitle(5, "Test 5 (2)")
-                .AddSubtitle(8, "Test 8 (3)");
+                .AddSubtitles(3, "Test 3 (1)")
+                .AddSubtitles(5, "Test 5 (2)")
+                .AddSubtitles(8, "Test 8 (3)");
             Assert.AreEqual(3, map.subtitles.Count);
         }
     }

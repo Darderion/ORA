@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace ORA
 {
-    public interface IMapStorage
+    public interface IMap
     {
-        Map Load(string inp);
-        bool Delete(string inp);
-        bool Save(Map map);
+        void AddSubtitle(int pos, string text);
     }
 }
