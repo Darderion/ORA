@@ -41,6 +41,17 @@ namespace ORA
             this.subtitles.Add(new Subtitle(inp_pos, inp_text));
             return this;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(Name + " (" + VideoURL + " : [" + startPos + "-" + finishPos + "])");
+            foreach(var keyValuePair in dict)
+            {
+                sb.AppendLine("   " + keyValuePair.Key + " : " + keyValuePair.Value);
+            }
+            return base.ToString();
+        }
     }
 
     [Table("ORA_Table_Subtitle")]
@@ -50,6 +61,7 @@ namespace ORA
         {
             pos = inp_pos;
             text = inp_text;
+            Map map = new Map();
         }
 
         public Subtitle() { }

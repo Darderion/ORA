@@ -67,7 +67,6 @@ namespace ORA
                     }
                     db.Maps.Add(map);
                     db.SaveChanges();
-                    MessageBox.Show("Saved successfully");
                     return true;
                 }
             }
