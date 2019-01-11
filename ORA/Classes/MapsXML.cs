@@ -34,16 +34,15 @@ namespace ORA
 
             public MapRepresentation(Map map)
             {
-                ID = map.ID;
                 Name = map.Name;
                 VideoURL = map.VideoURL;
                 startPos = map.startPos;
                 finishPos = map.finishPos;
 
                 var subs = new List<xmlSubtitle>();
-                foreach(Subtitle s in map.subtitles)
+                foreach(var keyValuePair in map.dict)
                 {
-                    subs.Add(new xmlSubtitle(s.pos, s.text));
+                    subs.Add(new xmlSubtitle(keyValuePair.Key, keyValuePair.Value));
                 }
                 subtitles = subs.ToArray();
             }
@@ -117,6 +116,20 @@ namespace ORA
             {
                 return false;
             }
+        }
+
+        public List<Map> GetListOfMaps()
+        {
+            List<Map> res = new List<Map>();
+            string[] files = Directory.GetFiles(Folder);
+            foreach(string fileName in files)
+            {
+                if (Path.GetExtension(fileName) == ".ORA")
+                {
+                    res.Add(Load(fileName));
+                }
+            }
+            return res;
         }
     }
 }

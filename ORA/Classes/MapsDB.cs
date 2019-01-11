@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,30 +12,97 @@ namespace ORA
 {
     class MapsDB : IMapStorage
     {
+        [Table("ORA_Table_Map")]
+        public class MapRepresentation
+        {
+            public MapRepresentation() { }
+
+            public MapRepresentation(Map map)
+            {
+                Name = map.Name;
+                VideoURL = map.VideoURL;
+                startPos = map.startPos;
+                finishPos = map.finishPos;
+                subtitles = new List<Subtitle>();
+                foreach(var keyValuePair in map.dict)
+                {
+                    subtitles.Add(new Subtitle(keyValuePair.Key, keyValuePair.Value));
+                }
+            }
+            
+            [Key, Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string VideoURL { get; set; }
+            public int startPos { get; set; }
+            public int finishPos { get; set; }
+
+            public virtual ICollection<Subtitle> subtitles { get; set; }
+        }
+
+        [Table("ORA_Table_Subtitle")]
+        public class Subtitle
+        {
+            public Subtitle(int inp_pos, string inp_text)
+            {
+                pos = inp_pos;
+                text = inp_text;
+                //MapRepresentation map = new MapRepresentation();
+            }
+
+            public Subtitle() { }
+
+            [Key, Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int ID { get; set; }
+            public int pos { get; set; }
+            public string text { get; set; }
+
+            public MapRepresentation map { get; set; }
+            public int MapID { get; set; }
+        }
+
+        private Map getMap(MapRepresentation dbMap)
+        {
+            Map map = new Map(dbMap.Name, dbMap.VideoURL, dbMap.startPos, dbMap.finishPos);
+            foreach (var s in dbMap.subtitles)
+            {
+                map.AddSubtitle(s.pos, s.text);
+            }
+            return map;
+        }
+
+        public List<Map> GetListOfMaps()
+        {
+            List<Map> res = new List<Map>();
+            using (var db = new TMapContext())
+            {
+                var maps = db.Maps.Include(s => s.subtitles);
+                foreach(var map in maps)
+                {
+                    MessageBox.Show(map.Name + " : " + map.subtitles.Count);
+                    res.Add(getMap(map));
+                }
+            }
+            return res;
+        }
+
         public Map Load(string inp)
         {
-            Map loaded_map = new Map();
             try
             {
                 using (var db = new TMapContext())
                 {
-                    var maps = db.Maps.ToList();
-                    loaded_map = maps.Where(o => o.Name == inp).FirstOrDefault();
-                    if (loaded_map != null)
-                    {
-                        loaded_map.dict = new Dictionary<int, string>();
-                        foreach (var line in loaded_map.subtitles)
-                        {
-                            loaded_map.dict.Add(line.pos, line.text);
-                        }
-                    }
+                    var maps = db.Maps.Include(s => s.subtitles).ToList();
+                    var mapRepresentation = maps.Where(o => o.Name == inp).FirstOrDefault();
+                    var map = getMap(mapRepresentation);
+                    return map;
                 }
             }
             catch(Exception e)
             {
                 MessageBox.Show(e.Message);
+                return null;
             }
-            return loaded_map;
         }
 
         public bool Delete(string inp)
@@ -53,25 +123,21 @@ namespace ORA
             }
         }
 
-        public bool Save(Map map)
+        public bool Save(Map inp_map)
         {
             try
             {
                 using (var db = new TMapContext())
                 {
-                    map.subtitles.Clear();
-                    foreach (var line in map.dict)
-                    {
-                        map.subtitles.Add(new Subtitle(line.Key, line.Value));
-                    }
-                    db.Maps.Add(map);
+                    var mapRepresentation = new MapRepresentation(inp_map);
+                    db.Maps.Add(mapRepresentation);
                     db.SaveChanges();
                     return true;
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Save error : "+e.Message);
             }
             return false;
         }

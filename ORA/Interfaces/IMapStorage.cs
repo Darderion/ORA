@@ -11,5 +11,6 @@ namespace ORA
         Map Load(string inp);
         bool Delete(string inp);
         bool Save(Map map);
+        List<Map> GetListOfMaps();
     }
 }

@@ -8,6 +8,6 @@ namespace ORA
 {
     public interface IMap
     {
-        void AddSubtitle(int pos, string text);
+        IMap AddSubtitle(int pos, string text);
     }
 }

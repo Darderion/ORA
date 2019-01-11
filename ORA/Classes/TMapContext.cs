@@ -11,6 +11,7 @@ namespace ORA
     class TMapContext : DbContext
     {
         public TMapContext() : base("DbConnection") { }
-        public DbSet<Map> Maps { get; set; }
+        public DbSet<MapsDB.MapRepresentation> Maps { get; set; }
+        public DbSet<MapsDB.Subtitle> Subtitles { get; set; }
     }
 }

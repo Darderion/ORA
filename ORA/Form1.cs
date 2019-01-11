@@ -134,24 +134,25 @@ namespace ORA
                 {
                     db.Database.Delete();
                     db.Database.CreateIfNotExists();
-
-                    Map map = new Map("Test Map", "JJS.mp4", 7, 160);
-                    map = map.AddSubtitles(0, "JJ1-0")
-                        .AddSubtitles(1, "JJ1-1")
-                        .AddSubtitles(4, "JJ1-4")
-                        .AddSubtitles(3, "JJ1-3");
-                    db.Maps.Add(map);
-
-                    map = new Map("Test Map 2", "JJS.mp4", 0, 162);
-                    map = map.AddSubtitles(0, "0")
-                        .AddSubtitles(1, "1")
-                        .AddSubtitles(5, "5")
-                        .AddSubtitles(7, "7");
-                    db.Maps.Add(map);
-
-                    db.SaveChanges();
-                    mapEditor.ChangeDBConnectionState(true);
                 }
+
+                MapsDB mapsDB = new MapsDB();
+
+                Map map = new Map("Test Map", "JJS.mp4", 7, 160);
+                map.AddSubtitle(8, "JJ1-0") //0
+                    .AddSubtitle(9, "JJ1-1") //1
+                    .AddSubtitle(4, "JJ1-4")
+                    .AddSubtitle(3, "JJ1-3");
+                mapsDB.Save(map);
+
+                map = new Map("Test Map 2", "JJS.mp4", 0, 162);
+                map.AddSubtitle(0, "0")
+                    .AddSubtitle(1, "1")
+                    .AddSubtitle(5, "5")
+                    .AddSubtitle(7, "7");
+                mapsDB.Save(map);
+
+                mapEditor.ChangeDBConnectionState(true);
             }
             catch (Exception ex)
             {

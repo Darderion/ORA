@@ -35,10 +35,12 @@ namespace ORA
         public void ShowListSubtitles(Map map)
         {
             listBoxSubtitles.Items.Clear();
-            List<Subtitle> subs = map.subtitles.ToList();
-            for(int i = 0; i < subs.Count; i++)
+            for(int i = map.startPos; i < map.finishPos; i++)
             {
-                listBoxSubtitles.Items.Add("["+subs[i].pos+"] : "+subs[i].text);
+                if (map.dict.ContainsKey(i) == true)
+                {
+                    listBoxSubtitles.Items.Add("[" + i + "] : " + map.dict[i]);
+                }
             }
         }
 
@@ -48,7 +50,7 @@ namespace ORA
             listBoxSubtitles.Items.Clear();
             using (var db = new TMapContext())
             {
-                maps = db.Maps.ToList();
+                maps = mapStorage.GetListOfMaps();
                 ShowListMaps();
             }
             currentMap.Name = "None";
