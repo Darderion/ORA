@@ -74,6 +74,11 @@ namespace ORA
                 mapEditor.textBoxURL = inp_textBox;
                 return this;
             }
+            public TMapEditorBuilder MapStorage(IMapStorage inp_mapStorage)
+            {
+                mapEditor.mapStorage = inp_mapStorage;
+                return this;
+            }
 
             public static implicit operator TMapEditor(TMapEditorBuilder editorBuilder)
             {
@@ -91,7 +96,7 @@ namespace ORA
 
         //Variables
 
-        public IMapStorage mapStorage = new MapsDB();
+        public IMapStorage mapStorage;
 
         EditorViewState viewState = EditorViewState.Video;
         EditorPlayState playState = EditorPlayState.Pause;

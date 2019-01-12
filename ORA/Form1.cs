@@ -14,6 +14,7 @@ namespace ORA
 {
     public partial class Form1 : Form
     {
+        public IMapStorage storage;
         TMapEditor mapEditor;
         PictureBox[] menuButtons;
 
@@ -114,7 +115,8 @@ namespace ORA
                 .View(buttonEditorView)
                 .Subtitles(textBoxSubtitle)
                 .LabelForTimer(textBoxVideoTimer)
-                .TextBoxURL(textBoxVideoURL);
+                .TextBoxURL(textBoxVideoURL)
+                .MapStorage(storage);
             mapEditor.AddHandlers();
             mapEditor.ChangeDBConnectionState(false);
 
@@ -218,7 +220,6 @@ namespace ORA
                     if (frm.DialogResult == DialogResult.OK)
                     {
                         mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
-                        mapEditor.LoadMap(frm.SceneName + "1");
                         mapEditor.LoadMap(frm.SceneName);
                     }
                 }

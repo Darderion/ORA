@@ -124,7 +124,7 @@ namespace ORA
             string[] files = Directory.GetFiles(Folder);
             foreach(string fileName in files)
             {
-                if (Path.GetExtension(fileName) == ".ORA")
+                if (Path.GetExtension(fileName) == Extension)
                 {
                     res.Add(Load(fileName));
                 }
