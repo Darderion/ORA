@@ -66,9 +66,22 @@ namespace ORA
             return map;
         }
 
+        private string getCorrectFilePath(string inp)
+        {
+            if (Path.GetExtension(inp) != Extension)
+            {
+                inp = inp + Extension;
+            }
+            if (inp.Contains(Folder) == false)
+            {
+                inp = Folder + inp;
+            }
+            return inp;
+        }
+
         public bool Delete(string inp)
         {
-            inp = Folder + inp + Extension;
+            inp = getCorrectFilePath(inp);
             try
             {
                 File.Delete(inp);
@@ -82,7 +95,7 @@ namespace ORA
 
         public Map Load(string inp)
         {
-            inp = Folder + inp + Extension;
+            inp = getCorrectFilePath(inp);
             Map map;
             try
             {
@@ -104,7 +117,7 @@ namespace ORA
         {
             try
             {
-                System.IO.Directory.CreateDirectory(Folder);
+                Directory.CreateDirectory(Folder);
                 using (var sw = new StreamWriter(Folder + map.Name + Extension))
                 {
                     var xm = new XmlSerializer(typeof(MapRepresentation));
@@ -115,6 +128,18 @@ namespace ORA
             catch(Exception e)
             {
                 return false;
+            }
+        }
+
+        public void Reset()
+        {
+            string[] files = Directory.GetFiles(Folder);
+            foreach (string fileName in files)
+            {
+                if (Path.GetExtension(fileName) == Extension)
+                {
+                    File.Delete(fileName);
+                }
             }
         }
 

@@ -16,7 +16,7 @@ namespace ORA
     {
         List<Map> maps;
         public Map currentMap;
-        public IMapStorage mapStorage = new MapsDB();
+        public IMapStorage mapStorage;
 
         public FormLoadMap()
         {

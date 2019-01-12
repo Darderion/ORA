@@ -70,6 +70,15 @@ namespace ORA
             return map;
         }
 
+        public void Reset()
+        {
+            using (var db = new TMapContext())
+            {
+                db.Database.Delete();
+                db.Database.CreateIfNotExists();
+            }
+        }
+
         public List<Map> GetListOfMaps()
         {
             List<Map> res = new List<Map>();

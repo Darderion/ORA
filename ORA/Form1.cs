@@ -132,27 +132,21 @@ namespace ORA
         {
             try
             {
-                using (var db = new TMapContext())
-                {
-                    db.Database.Delete();
-                    db.Database.CreateIfNotExists();
-                }
-
-                MapsDB mapsDB = new MapsDB();
+                storage.Reset();
 
                 Map map = new Map("Test Map", "JJS.mp4", 7, 160);
                 map.AddSubtitle(8, "JJ1-0") //0
                     .AddSubtitle(9, "JJ1-1") //1
                     .AddSubtitle(4, "JJ1-4")
                     .AddSubtitle(3, "JJ1-3");
-                mapsDB.Save(map);
+                storage.Save(map);
 
                 map = new Map("Test Map 2", "JJS.mp4", 0, 162);
                 map.AddSubtitle(0, "0")
                     .AddSubtitle(1, "1")
                     .AddSubtitle(5, "5")
                     .AddSubtitle(7, "7");
-                mapsDB.Save(map);
+                storage.Save(map);
 
                 mapEditor.ChangeDBConnectionState(true);
             }
@@ -230,6 +224,7 @@ namespace ORA
         {
             using (var frm = new FormLoadMap())
             {
+                frm.mapStorage = storage;
                 frm.StartPosition = FormStartPosition.CenterParent;
                 if (frm.ShowDialog() == DialogResult.OK)
                 {

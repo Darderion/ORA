@@ -12,5 +12,6 @@ namespace ORA
         bool Delete(string inp);
         bool Save(IMap map);
         List<Map> GetListOfMaps();
+        void Reset();
     }
 }
