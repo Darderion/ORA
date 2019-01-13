@@ -1,4 +1,5 @@
 ﻿using System;
+using AxWMPLib;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,7 +50,7 @@ namespace ORA
             this.Font = new Font("Splash", 18, FontStyle.Bold);
             //Full-screen mode
             FormBorderStyle = FormBorderStyle.None;
-            WindowState = FormWindowState.Maximized;
+            //WindowState = FormWindowState.Maximized;
             //Setting tabControl's properties
             mainTabControl.Left = 170;
             mainTabControl.Width = Width - mainTabControl.Left - 10;
@@ -152,7 +153,7 @@ namespace ORA
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Async : "+ex.Message);
             }
         }
 

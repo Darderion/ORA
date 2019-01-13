@@ -11,9 +11,6 @@ namespace ORA
 {
     public class MapsXML : IMapStorage
     {
-        private const string Folder = "Maps/";
-        private const string Extension = ".ORA";
-
         [Serializable]
         public class MapRepresentation
         {
@@ -68,13 +65,13 @@ namespace ORA
 
         private string getCorrectFilePath(string inp)
         {
-            if (Path.GetExtension(inp) != Extension)
+            if (Path.GetExtension(inp) != CL.Extension)
             {
-                inp = inp + Extension;
+                inp = inp + CL.Extension;
             }
-            if (inp.Contains(Folder) == false)
+            if (inp.Contains(CL.MapsFolder) == false)
             {
-                inp = Folder + inp;
+                inp = CL.MapsFolder + inp;
             }
             return inp;
         }
@@ -108,7 +105,6 @@ namespace ORA
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.Message);
                 return null;
             }
         }
@@ -117,8 +113,8 @@ namespace ORA
         {
             try
             {
-                Directory.CreateDirectory(Folder);
-                using (var sw = new StreamWriter(Folder + map.Name + Extension))
+                Directory.CreateDirectory(CL.MapsFolder);
+                using (var sw = new StreamWriter(CL.MapsFolder + map.Name + CL.Extension))
                 {
                     var xm = new XmlSerializer(typeof(MapRepresentation));
                     xm.Serialize(sw, new MapRepresentation(map));
@@ -133,10 +129,11 @@ namespace ORA
 
         public void Reset()
         {
-            string[] files = Directory.GetFiles(Folder);
+            Directory.CreateDirectory(CL.MapsFolder);
+            string[] files = Directory.GetFiles(CL.MapsFolder);
             foreach (string fileName in files)
             {
-                if (Path.GetExtension(fileName) == Extension)
+                if (Path.GetExtension(fileName) == CL.Extension)
                 {
                     File.Delete(fileName);
                 }
@@ -146,10 +143,10 @@ namespace ORA
         public List<Map> GetListOfMaps()
         {
             List<Map> res = new List<Map>();
-            string[] files = Directory.GetFiles(Folder);
+            string[] files = Directory.GetFiles(CL.MapsFolder);
             foreach(string fileName in files)
             {
-                if (Path.GetExtension(fileName) == Extension)
+                if (Path.GetExtension(fileName) == CL.Extension)
                 {
                     res.Add(Load(fileName));
                 }

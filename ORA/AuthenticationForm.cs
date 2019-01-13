@@ -15,7 +15,7 @@ namespace ORA
     public partial class AuthenticationForm : Form
     {
         PictureBox[] menuButtons = new PictureBox[CL.LoginMenuButtons];
-        bool isUsingDB = false;
+        UserSettings settings = new UserSettings();
 
         public AuthenticationForm()
         {
@@ -24,7 +24,7 @@ namespace ORA
 
         private bool SetImage(PictureBox pic, string fileName)
         {
-            if (isUsingDB == true)
+            if (settings.isUsingDB == true)
                 fileName = fileName.Replace(CL.StorageType, "DB");
             else
                 fileName = fileName.Replace(CL.StorageType, "XML");
@@ -43,6 +43,7 @@ namespace ORA
 
         private void AuthenticationForm_Load(object sender, EventArgs e)
         {
+            settings.Load();
             if (File.Exists(CL.FolderImages+"MainMenu.bmp") == true)
             {
                 this.BackgroundImage = Image.FromFile(CL.FolderImages + "MainMenu.bmp");
@@ -90,10 +91,14 @@ namespace ORA
 
             menuButtons[CL.LoginSettingsButtonResolution].Left = 531;
             menuButtons[CL.LoginSettingsButtonResolution].Top = 132;
+            menuButtons[CL.LoginSettingsButtonResolution].Click += ButtonResolution_OnClick;
 
             SwitchMenuState(true);
-            //502, 372
-            //531, 132
+        }
+
+        private void ButtonResolution_OnClick(Object o, EventArgs e)
+        {
+            MessageBox.Show("Not supported");
         }
 
         private void SwitchMenuState(bool isInMainMenu)
@@ -141,12 +146,13 @@ namespace ORA
 
         private void ButtonBack_OnClick(Object o, EventArgs e)
         {
+            settings.Save();
             SwitchMenuState(true);
         }
 
         private void ButtonStorage_OnClick(Object o, EventArgs e)
         {
-            isUsingDB = !isUsingDB;
+            settings.isUsingDB = !settings.isUsingDB;
             ButtonHover(menuButtons[CL.LoginSettingsButtonStorage], true);
         }
 
@@ -159,10 +165,12 @@ namespace ORA
         {
             using (var frm = new Form1())
             {
-                if (isUsingDB == true)
+                if (settings.isUsingDB == true)
                     frm.storage = new MapsDB();
                 else
                     frm.storage = new MapsXML();
+                frm.Width = settings.resolutionWidth;
+                frm.Height = settings.resolutionHeight;
                 frm.ShowDialog();
             }
             Close();

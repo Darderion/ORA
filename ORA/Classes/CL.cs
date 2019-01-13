@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ORA
 {
-    class CL
+    static class CL
     {
         //Class for constants
         
@@ -24,8 +24,12 @@ namespace ORA
         public const int LoginSettingsButtonBack = 5;
         public const int LoginMenuButtons = 6;
 
-        public const string FolderImages = "Images/";
+        public const string DataFolder = "Data/";
+        public const string FolderImages = DataFolder + "Images/";
         public const string StorageType = "$<StorageType>";
+        public const string DefaultSettingsFileName = "Settings.DIO";
+        public const string MapsFolder = DataFolder + "Maps/";
+        public const string Extension = ".ORA";
 
         public static readonly string[] LoginMenuButtonsNames = {
             "LoginMenuPlayButton",
