@@ -22,16 +22,22 @@ namespace ORA
             InitializeComponent();
         }
 
-        private void SetImage(PictureBox pic, string fileName)
+        private bool SetImage(PictureBox pic, string fileName)
         {
+            if (isUsingDB == true)
+                fileName = fileName.Replace(CL.StorageType, "DB");
+            else
+                fileName = fileName.Replace(CL.StorageType, "XML");
             string path = CL.FolderImages + fileName;
             if (File.Exists(path))
             {
                 pic.Image = Image.FromFile(path);
+                return true;
             }
             else
             {
-                MessageBox.Show("Failed to load " + fileName);
+                //MessageBox.Show("Failed to load " + fileName);
+                return false;
             }
         }
 
@@ -54,9 +60,11 @@ namespace ORA
                 menuButtons[i] = new PictureBox();
                 menuButtons[i].Parent = this;
                 menuButtons[i].BackColor = Color.Transparent;
-                SetImage(menuButtons[i], CL.LoginMenuButtonsNames[i] + ".png");
-                menuButtons[i].Width = menuButtons[i].Image.Width;
-                menuButtons[i].Height = menuButtons[i].Image.Height;
+                if (SetImage(menuButtons[i], CL.LoginMenuButtonsNames[i] + ".png") == true)
+                {
+                    menuButtons[i].Width = menuButtons[i].Image.Width;
+                    menuButtons[i].Height = menuButtons[i].Image.Height;
+                }
                 menuButtons[i].MouseHover += Button_OnMouseHoverOn;
                 menuButtons[i].MouseLeave += Button_OnMouseHoverOff;
             }
@@ -68,10 +76,49 @@ namespace ORA
             menuButtons[CL.LoginMenuButtonExit].Top = 305;
             menuButtons[CL.LoginMenuButtonExit].Click += ButtonExit_OnClick;
 
-            menuButtons[CL.LoginMenuButtonSettings].Left = 536;
-            menuButtons[CL.LoginMenuButtonSettings].Top = 400;
+            menuButtons[CL.LoginMenuButtonSettings].Left = 526; //536
+            menuButtons[CL.LoginMenuButtonSettings].Top = 400; //400
             menuButtons[CL.LoginMenuButtonSettings].Click += ButtonSettings_OnClick;
 
+            menuButtons[CL.LoginSettingsButtonStorage].Left = 502;
+            menuButtons[CL.LoginSettingsButtonStorage].Top = 372;
+            menuButtons[CL.LoginSettingsButtonStorage].Click += ButtonStorage_OnClick;
+
+            menuButtons[CL.LoginSettingsButtonBack].Left = 612;
+            menuButtons[CL.LoginSettingsButtonBack].Top = 305;
+            menuButtons[CL.LoginSettingsButtonBack].Click += ButtonBack_OnClick;
+
+            menuButtons[CL.LoginSettingsButtonResolution].Left = 531;
+            menuButtons[CL.LoginSettingsButtonResolution].Top = 132;
+
+            SwitchMenuState(true);
+            //502, 372
+            //531, 132
+        }
+
+        private void SwitchMenuState(bool isInMainMenu)
+        {
+            int start_pos = 0;
+            int finish_pos = 6;
+            if (isInMainMenu == true)
+            {
+                finish_pos = 3;
+            }
+            else
+            {
+                start_pos = 3;
+            }
+            for(int i = 0; i < CL.LoginMenuButtons; i++)
+            {
+                if ((i >= start_pos)&&(i < finish_pos))
+                {
+                    menuButtons[i].Visible = true;
+                }
+                else
+                {
+                    menuButtons[i].Visible = false;
+                }
+            }
         }
 
         private void ButtonHover(PictureBox pic, bool inside)
@@ -92,34 +139,20 @@ namespace ORA
             Close();
         }
 
+        private void ButtonBack_OnClick(Object o, EventArgs e)
+        {
+            SwitchMenuState(true);
+        }
+
+        private void ButtonStorage_OnClick(Object o, EventArgs e)
+        {
+            isUsingDB = !isUsingDB;
+            ButtonHover(menuButtons[CL.LoginSettingsButtonStorage], true);
+        }
+
         private void ButtonSettings_OnClick(Object o, EventArgs e)
         {
-            string str_using = "--(Using now)-->";
-            string str_not_using = "----------------->";
-
-            string str_db = "Local Database";
-            string str_xml = "Local files (Recommended)";
-
-            if (isUsingDB == true)
-            {
-                str_db = str_using + str_db;
-                str_xml = str_not_using + str_xml;
-            }
-            else
-            {
-                str_db = str_not_using + str_db;
-                str_xml = str_using + str_xml;
-            }
-
-            DialogResult dialogResult = MessageBox.Show(
-                "List of possible map storages : "+Environment.NewLine
-                +str_xml+Environment.NewLine
-                +str_db+Environment.NewLine
-                +"Do you want to change storage?", "Settings", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                isUsingDB = !isUsingDB;
-            }
+            SwitchMenuState(false);
         }
 
         private void ButtonPlay_OnClick(Object o, EventArgs e)
