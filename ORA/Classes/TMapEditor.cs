@@ -367,10 +367,11 @@ namespace ORA
                     bitmap.Save(ms, ImageFormat.Png);
                     Thumbnail = Image.FromStream(ms);
                 }
+
+                MessageBox.Show("Saved thumbnail");
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
             }
         }
 

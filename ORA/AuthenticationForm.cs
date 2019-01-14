@@ -98,7 +98,26 @@ namespace ORA
 
         private void ButtonResolution_OnClick(Object o, EventArgs e)
         {
-            MessageBox.Show("Not supported");
+            using (var frm = new FormResolution())
+            {
+                string s = CL.FolderImages + "ResolutionScreen.png";
+                if (File.Exists(s))
+                {
+                    Image img = Image.FromFile(s);
+                    frm.BackgroundImageLayout = ImageLayout.Stretch;
+                    frm.BackgroundImage = Image.FromFile(s);
+                }
+                frm.Width = Width - 20;
+                frm.Height = Height - 20;
+                frm.resWidth = settings.resolutionWidth;
+                frm.resHeight = settings.resolutionHeight;
+                frm.ShowDialog();
+                if (frm.DialogResult == DialogResult.OK)
+                {
+                    settings.resolutionWidth = frm.resWidth;
+                    settings.resolutionHeight = frm.resHeight;
+                }
+            }
         }
 
         private void SwitchMenuState(bool isInMainMenu)

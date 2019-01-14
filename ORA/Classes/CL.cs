@@ -24,6 +24,9 @@ namespace ORA
         public const int LoginSettingsButtonBack = 5;
         public const int LoginMenuButtons = 6;
 
+        public const int MinimalWidth = 800;
+        public const int MinimalHeight = 600;
+
         public const string DataFolder = "Data/";
         public const string FolderImages = DataFolder + "Images/";
         public const string StorageType = "$<StorageType>";

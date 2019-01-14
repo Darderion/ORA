@@ -32,9 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.buttonControl = new System.Windows.Forms.Button();
             this.gameMediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
             this.richTextBoxSubtitle = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.buttonThumbnail = new System.Windows.Forms.Button();
             this.textBoxVideoTimer = new System.Windows.Forms.TextBox();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
@@ -50,8 +52,6 @@
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
-            this.buttonControl = new System.Windows.Forms.Button();
-            this.buttonThumbnail = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gameMediaPlayer)).BeginInit();
@@ -82,6 +82,15 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // buttonControl
+            // 
+            this.buttonControl.Location = new System.Drawing.Point(638, 264);
+            this.buttonControl.Name = "buttonControl";
+            this.buttonControl.Size = new System.Drawing.Size(60, 40);
+            this.buttonControl.TabIndex = 2;
+            this.buttonControl.Text = "Type";
+            this.buttonControl.UseVisualStyleBackColor = true;
             // 
             // gameMediaPlayer
             // 
@@ -123,6 +132,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // buttonThumbnail
+            // 
+            this.buttonThumbnail.Location = new System.Drawing.Point(249, 23);
+            this.buttonThumbnail.Name = "buttonThumbnail";
+            this.buttonThumbnail.Size = new System.Drawing.Size(66, 23);
+            this.buttonThumbnail.TabIndex = 14;
+            this.buttonThumbnail.Text = "Thumbnail";
+            this.buttonThumbnail.UseVisualStyleBackColor = true;
             // 
             // textBoxVideoTimer
             // 
@@ -259,24 +277,6 @@
             // 
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
-            // 
-            // buttonControl
-            // 
-            this.buttonControl.Location = new System.Drawing.Point(638, 264);
-            this.buttonControl.Name = "buttonControl";
-            this.buttonControl.Size = new System.Drawing.Size(60, 40);
-            this.buttonControl.TabIndex = 2;
-            this.buttonControl.Text = "Type";
-            this.buttonControl.UseVisualStyleBackColor = true;
-            // 
-            // buttonThumbnail
-            // 
-            this.buttonThumbnail.Location = new System.Drawing.Point(249, 23);
-            this.buttonThumbnail.Name = "buttonThumbnail";
-            this.buttonThumbnail.Size = new System.Drawing.Size(66, 23);
-            this.buttonThumbnail.TabIndex = 14;
-            this.buttonThumbnail.Text = "Thumbnail";
-            this.buttonThumbnail.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

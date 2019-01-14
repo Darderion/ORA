@@ -20,3 +20,4 @@ C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.FormSaveMap.resources
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.FormLoadMap.resources
 C:\Users\Gideon\Source\Repos\ORA\ORA\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.AuthenticationForm.resources
+C:\Users\Gideon\Source\Repos\ORA\ORA\obj\Debug\ORA.FormResolution.resources
