@@ -40,7 +40,7 @@
             this.textBoxVideoTimer = new System.Windows.Forms.TextBox();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.buttonScroll5s2 = new System.Windows.Forms.Button();
+            this.buttonScroll5s = new System.Windows.Forms.Button();
             this.buttonEditorView = new System.Windows.Forms.Button();
             this.listBoxEditor = new System.Windows.Forms.ListBox();
             this.buttonScroll1s = new System.Windows.Forms.Button();
@@ -115,7 +115,7 @@
             this.tabPage2.Controls.Add(this.textBoxVideoTimer);
             this.tabPage2.Controls.Add(this.buttonLoad);
             this.tabPage2.Controls.Add(this.buttonSave);
-            this.tabPage2.Controls.Add(this.buttonScroll5s2);
+            this.tabPage2.Controls.Add(this.buttonScroll5s);
             this.tabPage2.Controls.Add(this.buttonEditorView);
             this.tabPage2.Controls.Add(this.listBoxEditor);
             this.tabPage2.Controls.Add(this.buttonScroll1s);
@@ -170,15 +170,15 @@
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
-            // buttonScroll5s2
+            // buttonScroll5s
             // 
-            this.buttonScroll5s2.Location = new System.Drawing.Point(221, 52);
-            this.buttonScroll5s2.Name = "buttonScroll5s2";
-            this.buttonScroll5s2.Size = new System.Drawing.Size(40, 23);
-            this.buttonScroll5s2.TabIndex = 10;
-            this.buttonScroll5s2.Text = "<<<";
-            this.buttonScroll5s2.UseVisualStyleBackColor = true;
-            this.buttonScroll5s2.Click += new System.EventHandler(this.buttonScroll5s_Click);
+            this.buttonScroll5s.Location = new System.Drawing.Point(221, 52);
+            this.buttonScroll5s.Name = "buttonScroll5s";
+            this.buttonScroll5s.Size = new System.Drawing.Size(40, 23);
+            this.buttonScroll5s.TabIndex = 10;
+            this.buttonScroll5s.Text = "<<<";
+            this.buttonScroll5s.UseVisualStyleBackColor = true;
+            this.buttonScroll5s.Click += new System.EventHandler(this.buttonScroll5s_Click);
             // 
             // buttonEditorView
             // 
@@ -313,7 +313,7 @@
         private System.Windows.Forms.Button buttonScroll1s;
         private System.Windows.Forms.Button buttonEditorView;
         private System.Windows.Forms.ListBox listBoxEditor;
-        private System.Windows.Forms.Button buttonScroll5s2;
+        private System.Windows.Forms.Button buttonScroll5s;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonLoad;
         private System.Windows.Forms.TextBox textBoxVideoTimer;

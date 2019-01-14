@@ -184,12 +184,7 @@ namespace ORA
         {
             using (var frm = new Form1())
             {
-                if (settings.isUsingDB == true)
-                    frm.storage = new MapsDB();
-                else
-                    frm.storage = new MapsXML();
-                frm.Width = settings.resolutionWidth;
-                frm.Height = settings.resolutionHeight;
+                frm.settings = settings;
                 frm.ShowDialog();
             }
             Close();

@@ -21,6 +21,8 @@ namespace ORA
 
         PictureBox pillar;
 
+        public UserSettings settings;
+
         public Form1()
         {
             InitializeComponent();
@@ -46,13 +48,70 @@ namespace ORA
             Close();
         }
 
+        private int AllignToTheRight(Control ctrl)
+        {
+            return ctrl.Left + ctrl.Width + 10;
+        }
+
+        private int GetTextWidth(Button button, Font font)
+        {
+            return TextRenderer.MeasureText(button.Text, font).Width;
+        }
+
+        private int GetTextWidth(Button button, float size)
+        {
+            return TextRenderer.MeasureText(button.Text, new Font(button.Font.FontFamily,size)).Width;
+        }
+
+        private int GetTextWidth(Button button)
+        {
+            return GetTextWidth(button, button.Font);
+        }
+
+        private void SetFontSize(params Button[] buttons)
+        {
+            float size = GetFontSize(tabPage1.Width - 100, Font.Size, buttons);
+            foreach (Button b in buttons)
+            {
+                b.Font = new Font(Font.FontFamily, size);
+            }
+        }
+
+        private float GetFontSize(int width, float inp, Button[] buttons)
+        {
+            int sum = 0;
+            Font font = new Font(Font.FontFamily, inp);
+            foreach (Button b in buttons)
+            {
+                sum += GetTextWidth(b, inp) + 10;
+            }
+            if (width < sum)
+                return GetFontSize(width, inp - 1, buttons);
+            else
+                return font.Size;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             //Setting font
             this.Font = new Font("Splash", 18, FontStyle.Bold);
+            if (settings.isUsingDB == true)
+                storage = new MapsDB();
+            else
+                storage = new MapsXML();
+            Width = settings.resolutionWidth;
+            Height = settings.resolutionHeight;
             //Full-screen mode
             FormBorderStyle = FormBorderStyle.None;
+            if (settings.isUsingDB == true)
+                storage = new MapsDB();
+            else
+                storage = new MapsXML();
+            Width = settings.resolutionWidth;
+            Height = settings.resolutionHeight;
             //WindowState = FormWindowState.Maximized;
+            Left = 0;
+            Top = 0;
             //Setting tabControl's properties
             mainTabControl.Left = 170;
             mainTabControl.Width = Width - mainTabControl.Left - 10;
@@ -60,6 +119,8 @@ namespace ORA
             mainTabControl.Top = -35;
             mainTabControl.Appearance = TabAppearance.FlatButtons;
             mainTabControl.SizeMode = TabSizeMode.Fixed;
+
+            SetFontSize(buttonPlay, buttonResumePause, buttonScroll1s, buttonScroll5s, buttonEditorView, buttonSave);
             //Initializing Menu Buttons (Represented by PictureBoxes)
             menuButtons = new PictureBox[CL.MenuButtons];
             for(int i = 0; i < CL.MenuButtons; i++)
@@ -95,6 +156,23 @@ namespace ORA
             textBoxVideoTimer.Left = editorPlayer.Left;
             textBoxVideoTimer.Top = textBoxSubtitle.Top;
             textBoxVideoTimer.Text = "";
+
+            buttonPlay.Width = GetTextWidth(buttonPlay) + 10;
+            buttonResumePause.Width = GetTextWidth(buttonResumePause) + 10;
+            buttonScroll1s.Width = GetTextWidth(buttonScroll1s) + 10;
+            buttonScroll5s.Width = GetTextWidth(buttonScroll5s) + 10;
+            buttonEditorView.Width = GetTextWidth(buttonEditorView) + 10;
+
+            buttonThumbnail.Left = AllignToTheRight(textBoxVideoURL);
+            buttonLoad.Left = AllignToTheRight(buttonThumbnail);
+            buttonResumePause.Left = AllignToTheRight(buttonPlay);
+            buttonScroll1s.Left = AllignToTheRight(buttonResumePause);
+            buttonScroll5s.Left = AllignToTheRight(buttonScroll1s);
+            buttonEditorView.Left = AllignToTheRight(buttonScroll5s);
+            buttonSave.Left = AllignToTheRight(buttonEditorView);
+
+            buttonSave.Width = editorPlayer.Left + editorPlayer.Width - buttonSave.Left;
+            buttonLoad.Width = editorPlayer.Left + editorPlayer.Width - buttonLoad.Left;
 
             listBoxEditor.Width = editorPlayer.Width;
             listBoxEditor.Height = editorPlayer.Height;

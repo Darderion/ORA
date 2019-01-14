@@ -47,6 +47,9 @@ namespace ORA
 
             textBoxWidth.Text = resWidth.ToString();
             textBoxHeight.Text = resHeight.ToString();
+
+            textBoxWidth.TextChanged += textBoxResolution_textChanged;
+            textBoxHeight.TextChanged += textBoxResolution_textChanged;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -58,7 +61,7 @@ namespace ORA
             Close();
         }
 
-        private void textBoxWidth_TextChanged(object sender, EventArgs e)
+        private void textBoxResolution_textChanged(Object o, EventArgs e)
         {
             int cur_width = 0;
             int cur_height = 0;

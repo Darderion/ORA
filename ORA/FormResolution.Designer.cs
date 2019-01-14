@@ -50,7 +50,6 @@
             this.textBoxWidth.Name = "textBoxWidth";
             this.textBoxWidth.Size = new System.Drawing.Size(100, 42);
             this.textBoxWidth.TabIndex = 1;
-            this.textBoxWidth.TextChanged += new System.EventHandler(this.textBoxWidth_TextChanged);
             // 
             // label1
             // 
