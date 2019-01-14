@@ -29,6 +29,8 @@ namespace ORA
         public const string StorageType = "$<StorageType>";
         public const string DefaultSettingsFileName = "Settings.DIO";
         public const string MapsFolder = DataFolder + "Maps/";
+        public const string VideoFolder = DataFolder + "Videos/";
+        public const string ThumbnailFolder = DataFolder + "Thumbnails/";
         public const string Extension = ".ORA";
 
         public static readonly string[] LoginMenuButtonsNames = {

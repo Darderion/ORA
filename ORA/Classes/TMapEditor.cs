@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -79,6 +80,11 @@ namespace ORA
                 mapEditor.mapStorage = inp_mapStorage;
                 return this;
             }
+            public TMapEditorBuilder Thumbnail(Button inp_buttonThumbnail)
+            {
+                mapEditor.buttonThumbnail = inp_buttonThumbnail;
+                return this;
+            }
 
             public static implicit operator TMapEditor(TMapEditorBuilder editorBuilder)
             {
@@ -108,6 +114,7 @@ namespace ORA
         Button buttonView;
         Button buttonLoad;
         Button buttonSave;
+        Button buttonThumbnail;
         TextBox textBoxTimer;
         Timer timer;
         AxWindowsMediaPlayer player;
@@ -116,6 +123,7 @@ namespace ORA
         TextBox textBoxURL;
 
         bool isConnectedToDB = false;
+        public Image Thumbnail;
 
         //Methods
 
@@ -184,6 +192,8 @@ namespace ORA
                 buttonPauseResume.Text = "Pause";
                 subtitles.ForeColor = Color.Black;
                 subtitles.Enabled = false;
+                if (player.Ctlcontrols.currentItem != null)
+                    textBoxTimer.Enabled = false;
                 player.Ctlcontrols.play();
             }
             else
@@ -192,6 +202,8 @@ namespace ORA
                 timer.Enabled = false;
                 buttonPauseResume.Text = "Resume";
                 subtitles.Enabled = true;
+                if (player.Ctlcontrols.currentItem != null)
+                    textBoxTimer.Enabled = true;
                 player.Ctlcontrols.pause();
             }
             return playState;
@@ -236,6 +248,7 @@ namespace ORA
             player.Ctlcontrols.currentPosition = map.startPos;
             textBoxTimer.Text = map.startPos.ToString();
             UpdateEditorListBox();
+            textBoxTimer.Enabled = false;
 
             playState = EditorPlayState.Play;
         }
@@ -326,6 +339,39 @@ namespace ORA
             buttonPlay.Click += buttonPlay_Click;
             buttonPauseResume.Click += buttonResumePause_Click;
             textBoxTimer.TextChanged += textBoxVideoTimer_TextChanged;
+            buttonThumbnail.Click += buttonThumbnail_Click;
+        }
+
+        private void buttonThumbnail_Click(object sender, EventArgs e)
+        {
+            Pause();
+            try
+            {
+                Bitmap bitmap = new Bitmap(player.Width, player.Height);
+                {
+                    Graphics g = Graphics.FromImage(bitmap);
+                    {
+                        Graphics gg = player.CreateGraphics();
+                        {
+                            g.CopyFromScreen(
+                                player.PointToScreen(new Point()).X,
+                                player.PointToScreen(new Point()).Y,
+                                0, 0,
+                                new Size(player.Width, player.Height));
+                        }
+                    }
+                }
+
+                using (var ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, ImageFormat.Png);
+                    Thumbnail = Image.FromStream(ms);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)

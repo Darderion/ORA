@@ -19,6 +19,8 @@ namespace ORA
         TMapEditor mapEditor;
         PictureBox[] menuButtons;
 
+        PictureBox pillar;
+
         public Form1()
         {
             InitializeComponent();
@@ -87,7 +89,7 @@ namespace ORA
 
             textBoxVideoURL.Left = editorPlayer.Left;
             textBoxSubtitle.Left = editorPlayer.Left + 80;
-            textBoxVideoURL.Width = tabPage2.Width - 50 - 170;
+            textBoxVideoURL.Width = tabPage2.Width - buttonThumbnail.Width - buttonLoad.Width - 100;
             textBoxSubtitle.Width = textBoxVideoURL.Width + editorPlayer.Left - textBoxSubtitle.Left;
             textBoxSubtitle.Top = editorPlayer.Top + editorPlayer.Height + 10;
             textBoxVideoTimer.Left = editorPlayer.Left;
@@ -100,10 +102,21 @@ namespace ORA
             listBoxEditor.Top = editorPlayer.Top;
             
             //Test properties
-            tabPage1.BackColor = Color.Black;
+            tabPage1.BackColor = Color.Gray;
             tabPage2.BackColor = Color.Gray;
             tabPage3.BackColor = Color.Green;
-            textBoxVideoURL.Text = "C:\\Programming\\JJS.mp4";
+            textBoxVideoURL.Text = "Data/Videos/";
+
+            pillar = new PictureBox();
+            pillar.Parent = this;
+            pillar.Width = mainTabControl.Left - 10;
+            pillar.Height = Height;
+            pillar.Left = 0;
+            pillar.Top = 0;
+            pillar.Image = Image.FromFile(CL.FolderImages + "Pillar.png");
+            pillar.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            BackColor = Color.Yellow;
 
             mapEditor = TMapEditor.Create()
                 .Play(buttonPlay)
@@ -117,9 +130,26 @@ namespace ORA
                 .Subtitles(textBoxSubtitle)
                 .LabelForTimer(textBoxVideoTimer)
                 .TextBoxURL(textBoxVideoURL)
-                .MapStorage(storage);
+                .MapStorage(storage)
+                .Thumbnail(buttonThumbnail);
             mapEditor.AddHandlers();
             mapEditor.ChangeDBConnectionState(false);
+
+            richTextBoxSubtitle.Width = tabPage1.Width - 20;
+            richTextBoxSubtitle.Left = 10;
+            richTextBoxSubtitle.Height = FontHeight * 3 + 5;
+            richTextBoxSubtitle.Top = tabPage1.Height - richTextBoxSubtitle.Height - 10;
+
+            buttonControl.Top = richTextBoxSubtitle.Top;
+            buttonControl.Height = richTextBoxSubtitle.Height;
+            buttonControl.Width = buttonControl.Height;
+            buttonControl.Left = tabPage1.Width - buttonControl.Width - 10;
+            richTextBoxSubtitle.Width -= buttonControl.Width + 10;
+
+            gameMediaPlayer.Top = 10;
+            gameMediaPlayer.Left = 10;
+            gameMediaPlayer.Width = tabPage1.Width - 20;
+            gameMediaPlayer.Height = richTextBoxSubtitle.Top - 20;
 
             DB_Init_ASync();
         }
@@ -135,14 +165,14 @@ namespace ORA
             {
                 storage.Reset();
 
-                Map map = new Map("Test Map", "JJS.mp4", 7, 160);
+                Map map = new Map("Test Map", CL.VideoFolder + "JJS.mp4", 7, 160);
                 map.AddSubtitle(8, "JJ1-0") //0
                     .AddSubtitle(9, "JJ1-1") //1
                     .AddSubtitle(4, "JJ1-4")
                     .AddSubtitle(3, "JJ1-3");
                 storage.Save(map);
 
-                map = new Map("Test Map 2", "JJS.mp4", 0, 162);
+                map = new Map("Test Map 2", CL.VideoFolder + "JJS.mp4", 0, 162);
                 map.AddSubtitle(0, "0")
                     .AddSubtitle(1, "1")
                     .AddSubtitle(5, "5")
@@ -214,6 +244,7 @@ namespace ORA
                     frm.ShowXY(textBoxVideoURL.Text, (int)editorPlayer.currentMedia.duration - 1);
                     if (frm.DialogResult == DialogResult.OK)
                     {
+                        mapEditor.Thumbnail.Save(CL.ThumbnailFolder + frm.SceneName + ".png");
                         mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
                         mapEditor.LoadMap(frm.SceneName);
                     }

@@ -32,7 +32,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gameMediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            this.richTextBoxSubtitle = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.textBoxVideoTimer = new System.Windows.Forms.TextBox();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonScroll5s2 = new System.Windows.Forms.Button();
@@ -47,8 +50,11 @@
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
-            this.textBoxVideoTimer = new System.Windows.Forms.TextBox();
+            this.buttonControl = new System.Windows.Forms.Button();
+            this.buttonThumbnail = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gameMediaPlayer)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
             this.SuspendLayout();
@@ -66,6 +72,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.buttonControl);
+            this.tabPage1.Controls.Add(this.gameMediaPlayer);
+            this.tabPage1.Controls.Add(this.richTextBoxSubtitle);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -74,8 +83,26 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // gameMediaPlayer
+            // 
+            this.gameMediaPlayer.Enabled = true;
+            this.gameMediaPlayer.Location = new System.Drawing.Point(6, 32);
+            this.gameMediaPlayer.Name = "gameMediaPlayer";
+            this.gameMediaPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("gameMediaPlayer.OcxState")));
+            this.gameMediaPlayer.Size = new System.Drawing.Size(330, 182);
+            this.gameMediaPlayer.TabIndex = 1;
+            // 
+            // richTextBoxSubtitle
+            // 
+            this.richTextBoxSubtitle.Location = new System.Drawing.Point(6, 6);
+            this.richTextBoxSubtitle.Name = "richTextBoxSubtitle";
+            this.richTextBoxSubtitle.Size = new System.Drawing.Size(686, 20);
+            this.richTextBoxSubtitle.TabIndex = 0;
+            this.richTextBoxSubtitle.Text = "";
+            // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.buttonThumbnail);
             this.tabPage2.Controls.Add(this.textBoxVideoTimer);
             this.tabPage2.Controls.Add(this.buttonLoad);
             this.tabPage2.Controls.Add(this.buttonSave);
@@ -96,6 +123,14 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // textBoxVideoTimer
+            // 
+            this.textBoxVideoTimer.Enabled = false;
+            this.textBoxVideoTimer.Location = new System.Drawing.Point(6, 481);
+            this.textBoxVideoTimer.Name = "textBoxVideoTimer";
+            this.textBoxVideoTimer.Size = new System.Drawing.Size(28, 20);
+            this.textBoxVideoTimer.TabIndex = 13;
             // 
             // buttonLoad
             // 
@@ -225,13 +260,23 @@
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
             // 
-            // textBoxVideoTimer
+            // buttonControl
             // 
-            this.textBoxVideoTimer.Enabled = false;
-            this.textBoxVideoTimer.Location = new System.Drawing.Point(6, 481);
-            this.textBoxVideoTimer.Name = "textBoxVideoTimer";
-            this.textBoxVideoTimer.Size = new System.Drawing.Size(28, 20);
-            this.textBoxVideoTimer.TabIndex = 13;
+            this.buttonControl.Location = new System.Drawing.Point(638, 264);
+            this.buttonControl.Name = "buttonControl";
+            this.buttonControl.Size = new System.Drawing.Size(60, 40);
+            this.buttonControl.TabIndex = 2;
+            this.buttonControl.Text = "Type";
+            this.buttonControl.UseVisualStyleBackColor = true;
+            // 
+            // buttonThumbnail
+            // 
+            this.buttonThumbnail.Location = new System.Drawing.Point(249, 23);
+            this.buttonThumbnail.Name = "buttonThumbnail";
+            this.buttonThumbnail.Size = new System.Drawing.Size(66, 23);
+            this.buttonThumbnail.TabIndex = 14;
+            this.buttonThumbnail.Text = "Thumbnail";
+            this.buttonThumbnail.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -243,6 +288,8 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.mainTabControl.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gameMediaPlayer)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).EndInit();
@@ -270,6 +317,10 @@
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonLoad;
         private System.Windows.Forms.TextBox textBoxVideoTimer;
+        private System.Windows.Forms.RichTextBox richTextBoxSubtitle;
+        private AxWMPLib.AxWindowsMediaPlayer gameMediaPlayer;
+        private System.Windows.Forms.Button buttonControl;
+        private System.Windows.Forms.Button buttonThumbnail;
     }
 }
 
