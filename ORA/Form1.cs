@@ -16,6 +16,7 @@ namespace ORA
     public partial class Form1 : Form
     {
         public IMapStorage storage;
+        GameController gameController;
         TMapEditor mapEditor;
         PictureBox[] menuButtons;
 
@@ -156,6 +157,7 @@ namespace ORA
             textBoxVideoTimer.Left = editorPlayer.Left;
             textBoxVideoTimer.Top = textBoxSubtitle.Top;
             textBoxVideoTimer.Text = "";
+            textBoxSubtitle.Width = editorPlayer.Width + editorPlayer.Left - textBoxSubtitle.Left;
 
             buttonPlay.Width = GetTextWidth(buttonPlay) + 10;
             buttonResumePause.Width = GetTextWidth(buttonResumePause) + 10;
@@ -228,6 +230,8 @@ namespace ORA
             gameMediaPlayer.Left = 10;
             gameMediaPlayer.Width = tabPage1.Width - 20;
             gameMediaPlayer.Height = richTextBoxSubtitle.Top - 20;
+
+            gameController = new GameController(gameMediaPlayer, buttonControl, richTextBoxSubtitle);
 
             DB_Init_ASync();
         }

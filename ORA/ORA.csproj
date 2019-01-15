@@ -63,6 +63,7 @@
       <DependentUpon>AuthenticationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Classes\CL.cs" />
+    <Compile Include="Classes\GameController.cs" />
     <Compile Include="Classes\MapsXML.cs" />
     <Compile Include="Classes\UserSettings.cs" />
     <Compile Include="Form1.cs">
