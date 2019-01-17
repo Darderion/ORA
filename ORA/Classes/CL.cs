@@ -44,5 +44,7 @@ namespace ORA
             "LoginSettingsButtonResolution",
             "LoginSettingsButtonBack"
         };
+
+        public static readonly string LockedMap = "TheLock";
     }
 }

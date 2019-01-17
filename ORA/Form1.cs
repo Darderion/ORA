@@ -30,7 +30,7 @@ namespace ORA
 
         private void PlayButton_OnClick_Handler(object sender, EventArgs e)
         {
-            mainTabControl.SelectedIndex = 0;
+            mainTabControl.SelectedIndex = 3;
         }
 
         private void MapsButton_OnClick_Handler(object sender, EventArgs e)
@@ -183,6 +183,7 @@ namespace ORA
             tabPage1.BackColor = Color.Gray;
             tabPage2.BackColor = Color.Gray;
             tabPage3.BackColor = Color.Green;
+            tabPage4.BackColor = Color.Gray;
             textBoxVideoURL.Text = "Data/Videos/";
 
             pillar = new PictureBox();
@@ -211,7 +212,7 @@ namespace ORA
                 .MapStorage(storage)
                 .Thumbnail(buttonThumbnail);
             mapEditor.AddHandlers();
-            mapEditor.ChangeDBConnectionState(false);
+            mapEditor.ChangeDBConnectionState(true);
 
             richTextBoxSubtitle.Width = tabPage1.Width - 20;
             richTextBoxSubtitle.Left = 10;
@@ -229,7 +230,10 @@ namespace ORA
             gameMediaPlayer.Width = tabPage1.Width - 20;
             gameMediaPlayer.Height = richTextBoxSubtitle.Top - 20;
 
-            DB_Init_ASync();
+            MenuMap[,] menuMaps = new MenuMap[4, 4];
+            MenuService.SetMenuMaps(ref menuMaps, tabPage4);
+
+            //DB_Init_ASync();
         }
 
         public async Task DB_Init_ASync()
@@ -322,6 +326,7 @@ namespace ORA
                     frm.ShowXY(textBoxVideoURL.Text, (int)editorPlayer.currentMedia.duration - 1);
                     if (frm.DialogResult == DialogResult.OK)
                     {
+                        Directory.CreateDirectory(CL.ThumbnailFolder);
                         mapEditor.Thumbnail.Save(CL.ThumbnailFolder + frm.SceneName + ".png");
                         mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
                         mapEditor.LoadMap(frm.SceneName);
