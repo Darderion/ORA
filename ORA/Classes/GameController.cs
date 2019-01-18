@@ -10,7 +10,9 @@ namespace ORA
 {
     class GameController
     {
-        public GameController(AxWindowsMediaPlayer inp_player, Button inp_button, RichTextBox inp_textBoxSubtitles)
+        private static GameController instance;
+
+        public void SetGameController(AxWindowsMediaPlayer inp_player, Button inp_button, RichTextBox inp_textBoxSubtitles)
         {
             player = inp_player;
             controlButton = inp_button;
@@ -18,8 +20,21 @@ namespace ORA
             Ini();
         }
 
+        public static GameController Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GameController();
+                }
+                return instance;
+            }
+        }
+
         IMap map;
         int curPos = 0;
+        int prevPos = 0;
         Timer timer;
         AxWindowsMediaPlayer player;
         Button controlButton;
@@ -33,6 +48,17 @@ namespace ORA
             timer.Tick += TimerTick;
         }
 
+        public void Play()
+        {
+            if (map != null)
+            {
+                timer.Enabled = true;
+                //player.Ctlcontrols.currentPosition = 0;
+                player.URL = map.VideoURL;
+                player.Ctlcontrols.play();
+            }
+        }
+
         public void SetMap(IMap inp_map)
         {
             map = inp_map;
@@ -41,6 +67,11 @@ namespace ORA
         private void TimerTick(Object o, EventArgs e)
         {
             curPos = (int) player.Ctlcontrols.currentPosition;
+            if (prevPos < curPos)
+            {
+                prevPos = curPos;
+                subtitles.Text += "1";
+            }
         }
     }
 }

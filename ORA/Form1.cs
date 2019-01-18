@@ -19,6 +19,7 @@ namespace ORA
         GameController gameController;
         TMapEditor mapEditor;
         PictureBox[] menuButtons;
+        MenuMap[,] menuMaps;
 
         PictureBox pillar;
 
@@ -231,10 +232,40 @@ namespace ORA
             gameMediaPlayer.Left = 10;
             gameMediaPlayer.Width = tabPage1.Width - 20;
             gameMediaPlayer.Height = richTextBoxSubtitle.Top - 20;
-            MenuMap[,] menuMaps = new MenuMap[4, 4];
-            MenuService.SetMenuMaps(ref menuMaps, tabPage4);
 
+            menuMaps = new MenuMap[4, 4];
+            MenuService.SetMenuMaps(ref menuMaps, tabPage4);
+            foreach(var menuMap in menuMaps)
+            {
+                menuMap.pic.Click += MenuMap_Click;
+            }
+            
+            GameController.Instance.SetGameController(
+                gameMediaPlayer,
+                buttonControl,
+                richTextBoxSubtitle);
+            MenuService.UpdateMapsPage(storage, ref menuMaps, 0);
             //DB_Init_ASync();
+        }
+
+        public void MenuMap_Click(Object o, EventArgs e)
+        {
+            int sx = 0;
+            int sy = 0;
+            for (int x = 0; x < menuMaps.GetLength(0); x++)
+            {
+                for (int y = 0; y < menuMaps.GetLength(1); y++)
+                {
+                    if (o == menuMaps[x, y].pic)
+                    {
+                        sx = x;
+                        sy = y;
+                    }
+                }
+            }
+            GameController.Instance.SetMap(storage.Load(menuMaps[sx,sy].mapName));
+            mainTabControl.SelectedIndex = 0;
+            GameController.Instance.Play();
         }
 
         public async Task DB_Init_ASync()

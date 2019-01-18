@@ -46,5 +46,6 @@ namespace ORA
         };
 
         public static readonly string LockedMap = "TheLock";
+        public static readonly string NoMap = "None";
     }
 }

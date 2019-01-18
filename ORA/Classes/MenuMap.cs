@@ -26,5 +26,19 @@ namespace ORA
 
         public PictureBox pic;
         public Label label;
+        public string mapName;
+
+        public bool Visible
+        {
+            get
+            {
+                return pic.Visible;
+            }
+            set
+            {
+                pic.Visible = value;
+                label.Visible = value;
+            }
+        }
     }
 }

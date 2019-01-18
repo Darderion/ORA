@@ -51,8 +51,8 @@
             this.labelVideoURL = new System.Windows.Forms.Label();
             this.textBoxVideoURL = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.editorTimer = new System.Windows.Forms.Timer(this.components);
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.editorTimer = new System.Windows.Forms.Timer(this.components);
             this.mainTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gameMediaPlayer)).BeginInit();
@@ -105,6 +105,7 @@
             // 
             // richTextBoxSubtitle
             // 
+            this.richTextBoxSubtitle.Enabled = false;
             this.richTextBoxSubtitle.Location = new System.Drawing.Point(6, 6);
             this.richTextBoxSubtitle.Name = "richTextBoxSubtitle";
             this.richTextBoxSubtitle.Size = new System.Drawing.Size(686, 20);
@@ -275,11 +276,6 @@
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // editorTimer
-            // 
-            this.editorTimer.Interval = 250;
-            this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
-            // 
             // tabPage4
             // 
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
@@ -288,6 +284,11 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // editorTimer
+            // 
+            this.editorTimer.Interval = 250;
+            this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
             // 
             // Form1
             // 

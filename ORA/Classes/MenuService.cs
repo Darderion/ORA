@@ -31,24 +31,27 @@ namespace ORA
             {
                 for(int y = 0; y < max_y; y++)
                 {
-                    maps[x, y] = new MenuMap(ctrl);
+                    if (maps[x, y] == null)
+                    {
+                        maps[x, y] = new MenuMap(ctrl);
+                    }
                     SetMenuMap(ref maps[x, y], CL.LockedMap, max_x, max_y, x, y);
                 }
             }
         }
 
-        public static bool SetMenuMap(ref MenuMap menuMap, string inp, int horizontalAmount, int verticalAmount, int x, int y)
+        public static bool SetMenuMap(ref MenuMap menuMap, string mapName, int horizontalAmount, int verticalAmount, int x, int y)
         {
-            return SetMenuMap(ref menuMap, inp,
+            return SetMenuMap(ref menuMap, mapName,
                 horizontalAmount, verticalAmount,
                 x, y, 10, 50);
         }
 
-        public static bool SetMenuMap(ref MenuMap menuMap, string inp, int horizontalAmount, int verticalAmount, int x, int y, int horizontalIndent, int verticalIndent)
+        public static bool SetMenuMap(ref MenuMap menuMap, string mapName, int horizontalAmount, int verticalAmount, int x, int y, int horizontalIndent, int verticalIndent)
         {
-            Image img = getThumbnail(inp);
+            Image img = getThumbnail(mapName);
             if (img == null) return false;
-            menuMap.label.Text = inp;
+            menuMap.label.Text = mapName;
             menuMap.pic.Image = img;
             ThumbnailSize size = getThumbnailSize(
                 menuMap.pic.Parent.Width, menuMap.pic.Parent.Height,
@@ -57,6 +60,8 @@ namespace ORA
             menuMap.pic.Width = size.width;
             menuMap.pic.Height = size.height;
 
+            menuMap.mapName = CL.NoMap;
+
             menuMap.pic.Left = horizontalIndent * (x + 1) + size.width * x;
             menuMap.pic.Top = verticalIndent * (y + 1) + size.height * y;
 
@@ -64,9 +69,52 @@ namespace ORA
             menuMap.label.Top = menuMap.pic.Top + menuMap.pic.Height;
             menuMap.label.Width = menuMap.pic.Width;
             menuMap.label.Height = verticalIndent;
-            menuMap.label.Text = getLabelText("Locked",
-                menuMap.label.Font, menuMap.label.Width, menuMap.label.Height,TextRenderer.MeasureText("...",menuMap.label.Font).Width);
+            menuMap.label.Text = getLabelText(CL.NoMap,
+                menuMap.label.Font, menuMap.label.Width, menuMap.label.Height,
+                TextRenderer.MeasureText("...",menuMap.label.Font).Width);
             return true;
+        }
+
+        public static void UpdateMapsPage(IMapStorage storage, ref MenuMap[,] menuMaps, int inp)
+        {
+            int width = menuMaps.GetLength(0);
+            int size = menuMaps.Length;
+            List<Map> maps = storage.GetListOfMaps();
+            int tailCount = maps.Count - size * inp;
+            if (tailCount > 0)
+            {
+                maps = maps.GetRange(size * inp, Math.Min(size, tailCount));
+            }
+            int x = 0;
+            int y = 0;
+            int max = Math.Min(size, maps.Count);
+            for (int i = 0; i < max; i++)
+            {
+                y = i / width;
+                x = i % width;
+                menuMaps[x, y].mapName = maps[i].Name;
+                menuMaps[x, y].pic.Image = getThumbnail(maps[i].Name);
+                menuMaps[x, y].label.Text = setLabelText(menuMaps[x, y]);
+            }
+            UpdateVisibility(ref menuMaps);
+        }
+
+        public static void UpdateVisibility(ref MenuMap[,] menuMaps)
+        {
+            foreach(var map in menuMaps)
+            {
+                if (map.mapName == CL.NoMap)
+                    map.Visible = false;
+                else
+                    map.Visible = true;
+            }
+        }
+
+        private static string setLabelText(MenuMap menuMap)
+        {
+            return getLabelText(menuMap.mapName,
+                menuMap.label.Font, menuMap.label.Width, menuMap.label.Height,
+                TextRenderer.MeasureText("...", menuMap.label.Font).Width);
         }
 
         private static string getLabelText(string text, Font font, int width, int height, int addedWidth)
