@@ -350,16 +350,26 @@ namespace ORA
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            if (mapEditor.Thumbnail == null)
+            {
+                MessageBox.Show("No Thumbnail");
+                return;
+            }
             if (editorPlayer.currentMedia != null)
             {
                 using (var frm = new FormSaveMap())
                 {
+                    frm.Pos1 = mapEditor.StartPos;
+                    frm.Pos2 = mapEditor.FinishPos;
                     frm.StartPosition = FormStartPosition.CenterParent;
                     frm.ShowXY(textBoxVideoURL.Text, (int)editorPlayer.currentMedia.duration - 1);
                     if (frm.DialogResult == DialogResult.OK)
                     {
                         Directory.CreateDirectory(CL.ThumbnailFolder);
-                        mapEditor.Thumbnail.Save(CL.ThumbnailFolder + frm.SceneName + ".png");
+                        string thumbnailName = CL.ThumbnailFolder + frm.SceneName + ".png";
+                        if (File.Exists(thumbnailName) == true)
+                            File.Delete(thumbnailName);
+                        mapEditor.Thumbnail.Save(thumbnailName);
                         mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
                         mapEditor.LoadMap(frm.SceneName);
                     }

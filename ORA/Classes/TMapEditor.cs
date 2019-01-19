@@ -124,6 +124,30 @@ namespace ORA
 
         bool isConnectedToDB = false;
         public Image Thumbnail;
+        
+        public int StartPos
+        {
+            get
+            {
+                return map.startPos;
+            }
+            set
+            {
+                map.startPos = value;
+            }
+        }
+
+        public int FinishPos
+        {
+            get
+            {
+                return map.finishPos;
+            }
+            set
+            {
+                map.finishPos = value;
+            }
+        }
 
         //Methods
 
@@ -282,9 +306,12 @@ namespace ORA
 
         public bool LoadMap(string inp)
         {
-            if (mapStorage.Load(inp) != null)
+            Map LoadedMap = mapStorage.Load(inp);
+            if (LoadedMap != null)
             {
-                map = mapStorage.Load(inp);
+                Thumbnail = MenuService.getThumbnail(inp);
+                map = LoadedMap;
+                textBoxURL.Text = map.VideoURL;
                 UpdateEditorListBox();
                 return true;
             }

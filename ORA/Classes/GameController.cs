@@ -17,6 +17,7 @@ namespace ORA
             player = inp_player;
             controlButton = inp_button;
             subtitles = inp_textBoxSubtitles;
+            subtitles.ScrollBars = RichTextBoxScrollBars.None;
             Ini();
         }
 
@@ -52,10 +53,15 @@ namespace ORA
         {
             if (map != null)
             {
+                curPos = 0;
+                prevPos = 0;
                 timer.Enabled = true;
                 //player.Ctlcontrols.currentPosition = 0;
                 player.URL = map.VideoURL;
+                player.Ctlcontrols.currentPosition = map.startPos;
                 player.Ctlcontrols.play();
+
+                subtitles.Clear();
             }
         }
 
@@ -69,8 +75,15 @@ namespace ORA
             curPos = (int) player.Ctlcontrols.currentPosition;
             if (prevPos < curPos)
             {
+                if (curPos == map.finishPos)
+                    player.Ctlcontrols.stop();
                 prevPos = curPos;
-                subtitles.Text += "1";
+                if (map.dict.ContainsKey(curPos))
+                {
+                    subtitles.Text += map.dict[curPos] + Environment.NewLine;
+                    subtitles.SelectionStart = subtitles.Text.Length;
+                    subtitles.ScrollToCaret();
+                }
             }
         }
     }
