@@ -64,9 +64,11 @@
     </Compile>
     <Compile Include="Classes\CL.cs" />
     <Compile Include="Classes\GameController.cs" />
+    <Compile Include="Classes\Letter.cs" />
     <Compile Include="Classes\MapsXML.cs" />
     <Compile Include="Classes\MenuMap.cs" />
     <Compile Include="Classes\MenuService.cs" />
+    <Compile Include="Classes\Subtitles.cs" />
     <Compile Include="Classes\UserSettings.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

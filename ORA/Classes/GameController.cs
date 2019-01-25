@@ -1,6 +1,7 @@
 ﻿using AxWMPLib;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,15 +11,21 @@ namespace ORA
 {
     class GameController
     {
-        private static GameController instance;
+        public GameController()
+        {
+            subtitles = new Subtitles();
+        }
 
-        public void SetGameController(AxWindowsMediaPlayer inp_player, Button inp_button, RichTextBox inp_textBoxSubtitles)
+        private static GameController instance;
+        private string[] text;
+        public Subtitles subtitles;
+        public bool isPlaying;
+
+        public void SetGameController(AxWindowsMediaPlayer inp_player, Button inp_button, Control control)
         {
             player = inp_player;
             controlButton = inp_button;
-            subtitles = inp_textBoxSubtitles;
-            subtitles.ScrollBars = RichTextBoxScrollBars.None;
-            Ini();
+            Init(control);
         }
 
         public static GameController Instance
@@ -34,57 +41,99 @@ namespace ORA
         }
 
         IMap map;
-        int curPos = 0;
-        int prevPos = 0;
+        int curTimerPos = 0;
+        int prevTimerPos = 0;
+
+        int curSubtitlePos = 0;
+        int curSubtitleInd = 2;
+
         Timer timer;
         AxWindowsMediaPlayer player;
         Button controlButton;
-        RichTextBox subtitles;
 
-        private void Ini()
+        private void Init(Control control)
         {
             timer = new Timer();
             timer.Enabled = false;
             timer.Interval = 250;
             timer.Tick += TimerTick;
+
+            text = new string[3] { "", "", "" };
+            controlButton.KeyPress += UserTyped;
+
+            controlButton.Click += controlButton_Click;
+
+            subtitles.SetParents(control);
         }
 
         public void Play()
         {
+            if (isPlaying == true) return;
             if (map != null)
             {
-                curPos = 0;
-                prevPos = 0;
+                isPlaying = true;
+                text[0] = "..."; text[1] = ".."; text[2] = ".";
+                curTimerPos = 0;
+                prevTimerPos = 0;
                 timer.Enabled = true;
-                //player.Ctlcontrols.currentPosition = 0;
                 player.URL = map.VideoURL;
                 player.Ctlcontrols.currentPosition = map.startPos;
                 player.Ctlcontrols.play();
-
-                subtitles.Clear();
             }
+        }
+
+        private void controlButton_Click(Object o, EventArgs e)
+        {
+            Play();
         }
 
         public void SetMap(IMap inp_map)
         {
             map = inp_map;
+            curSubtitlePos = 0;
+            isPlaying = false;
         }
 
         private void TimerTick(Object o, EventArgs e)
         {
-            curPos = (int) player.Ctlcontrols.currentPosition;
-            if (prevPos < curPos)
+            curTimerPos = (int) player.Ctlcontrols.currentPosition;
+            if (prevTimerPos < curTimerPos)
             {
-                if (curPos == map.finishPos)
-                    player.Ctlcontrols.stop();
-                prevPos = curPos;
-                if (map.dict.ContainsKey(curPos))
+                if (curTimerPos == map.finishPos)
                 {
-                    subtitles.Text += map.dict[curPos] + Environment.NewLine;
-                    subtitles.SelectionStart = subtitles.Text.Length;
-                    subtitles.ScrollToCaret();
+                    player.Ctlcontrols.stop();
+                }
+                prevTimerPos = curTimerPos;
+                if (map.dict.ContainsKey(curTimerPos))
+                {
+                    subtitles.SetText(map.dict[curTimerPos]);
+                    //AddText(map.dict[curTimerPos]);
                 }
             }
+            controlButton.Text = curSubtitlePos + "<";
+        }
+
+        public static bool isInputChar(char inp)
+        {
+            if (inp == ' ') return true;
+            if ((inp >= 'a') && (inp <= 'z')) return true;
+            if ((inp >= 'A') && (inp <= 'Z')) return true;
+            return false;
+        }
+
+        private void UserTyped(Object o, EventArgs e)
+        {
+            if (letterTypedCorrectly(((KeyPressEventArgs)e).KeyChar) == true)
+            {
+                subtitles.MoveToNextSymbol();
+            }
+        }
+
+        private bool letterTypedCorrectly(Char symb)
+        {
+            if (subtitles.CurrentlySelected == symb)
+                return true;
+            return false;
         }
     }
 }

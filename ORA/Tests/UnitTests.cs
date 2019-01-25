@@ -19,5 +19,17 @@ namespace ORA.Tests
                 .AddSubtitle(8, "Test 8 (3)");
             Assert.AreEqual(3, map.dict.Count);
         }
+
+        [TestMethod]
+        public void GameController_IsInputCharacter()
+        {
+            Assert.AreEqual(true, GameController.isInputChar('a'));
+            Assert.AreEqual(true, GameController.isInputChar('o'));
+            Assert.AreEqual(true, GameController.isInputChar(' '));
+
+            Assert.AreEqual(false, GameController.isInputChar('*'));
+            Assert.AreEqual(false, GameController.isInputChar('$'));
+            Assert.AreEqual(false, GameController.isInputChar('.'));
+        }
     }
 }

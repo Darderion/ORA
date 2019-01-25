@@ -1,5 +1,4 @@
 ﻿using System;
-using AxWMPLib;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,6 +19,9 @@ namespace ORA
         TMapEditor mapEditor;
         PictureBox[] menuButtons;
         MenuMap[,] menuMaps;
+        int curPage = 0;
+
+        List<Letter> letters = new List<Letter>();
 
         PictureBox pillar;
 
@@ -32,6 +34,7 @@ namespace ORA
 
         private void PlayButton_OnClick_Handler(object sender, EventArgs e)
         {
+            MenuService.UpdateMapsPage(storage, ref menuMaps, curPage);
             mainTabControl.SelectedIndex = 3;
         }
 
@@ -216,22 +219,21 @@ namespace ORA
                 .Thumbnail(buttonThumbnail);
             mapEditor.AddHandlers();
             mapEditor.ChangeDBConnectionState(true);
-
-            richTextBoxSubtitle.Width = tabPage1.Width - 20;
-            richTextBoxSubtitle.Left = 10;
-            richTextBoxSubtitle.Height = FontHeight * 3 + 5;
-            richTextBoxSubtitle.Top = tabPage1.Height - richTextBoxSubtitle.Height - 10;
-
-            buttonControl.Top = richTextBoxSubtitle.Top;
-            buttonControl.Height = richTextBoxSubtitle.Height;
+            
             buttonControl.Width = buttonControl.Height;
             buttonControl.Left = tabPage1.Width - buttonControl.Width - 10;
-            richTextBoxSubtitle.Width -= buttonControl.Width + 10;
 
             gameMediaPlayer.Top = 10;
             gameMediaPlayer.Left = 10;
             gameMediaPlayer.Width = tabPage1.Width - 20;
-            gameMediaPlayer.Height = richTextBoxSubtitle.Top - 20;
+
+            buttonControl.Width = 100;
+            buttonControl.Height = buttonControl.Width;
+            
+            gameMediaPlayer.Height = tabPage1.Height - 40 - buttonControl.Height;
+
+            buttonControl.Top = gameMediaPlayer.Top + gameMediaPlayer.Height + 10;
+            buttonControl.Left = gameMediaPlayer.Left + gameMediaPlayer.Width - buttonControl.Width;
 
             menuMaps = new MenuMap[4, 4];
             MenuService.SetMenuMaps(ref menuMaps, tabPage4);
@@ -243,9 +245,23 @@ namespace ORA
             GameController.Instance.SetGameController(
                 gameMediaPlayer,
                 buttonControl,
-                richTextBoxSubtitle);
-            MenuService.UpdateMapsPage(storage, ref menuMaps, 0);
+                tabPage1);
+
+            for (int i = 0; i < 100; i++)
+            {
+                letters.Add(new Letter());
+                letters[letters.Count - 1].SetPosition(100, buttonControl.Top);
+                letters[letters.Count - 1].SetValue('A');
+            }
             //DB_Init_ASync();
+        }
+
+        private void letterHandler(Object o, EventArgs e)
+        {
+            int counter = 0;
+            for (int i = 0; i < 100; i++)
+                if (letters[i] == (Letter)o)
+                    counter = i;
         }
 
         public void MenuMap_Click(Object o, EventArgs e)
@@ -265,40 +281,6 @@ namespace ORA
             }
             GameController.Instance.SetMap(storage.Load(menuMaps[sx,sy].mapName));
             mainTabControl.SelectedIndex = 0;
-            GameController.Instance.Play();
-        }
-
-        public async Task DB_Init_ASync()
-        {
-            await Task.Run(Init_ASync);
-        }
-
-        public async Task Init_ASync()
-        {
-            try
-            {
-                storage.Reset();
-
-                Map map = new Map("Test Map", CL.VideoFolder + "JJS.mp4", 7, 160);
-                map.AddSubtitle(8, "JJ1-0") //0
-                    .AddSubtitle(9, "JJ1-1") //1
-                    .AddSubtitle(4, "JJ1-4")
-                    .AddSubtitle(3, "JJ1-3");
-                storage.Save(map);
-
-                map = new Map("Test Map 2", CL.VideoFolder + "JJS.mp4", 0, 162);
-                map.AddSubtitle(0, "0")
-                    .AddSubtitle(1, "1")
-                    .AddSubtitle(5, "5")
-                    .AddSubtitle(7, "7");
-                storage.Save(map);
-
-                mapEditor.ChangeDBConnectionState(true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Async : "+ex.Message);
-            }
         }
 
         private void editorTimer_Tick(object sender, EventArgs e)
@@ -367,9 +349,16 @@ namespace ORA
                     {
                         Directory.CreateDirectory(CL.ThumbnailFolder);
                         string thumbnailName = CL.ThumbnailFolder + frm.SceneName + ".png";
-                        if (File.Exists(thumbnailName) == true)
-                            File.Delete(thumbnailName);
-                        mapEditor.Thumbnail.Save(thumbnailName);
+                        try
+                        {
+                            if (File.Exists(thumbnailName) == true)
+                                File.Delete(thumbnailName);
+                            mapEditor.Thumbnail.Save(thumbnailName);
+                        }
+                        catch(Exception ex)
+                        {
+
+                        }
                         mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
                         mapEditor.LoadMap(frm.SceneName);
                     }

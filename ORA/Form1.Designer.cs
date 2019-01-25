@@ -34,7 +34,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.buttonControl = new System.Windows.Forms.Button();
             this.gameMediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
-            this.richTextBoxSubtitle = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.buttonThumbnail = new System.Windows.Forms.Button();
             this.textBoxVideoTimer = new System.Windows.Forms.TextBox();
@@ -76,7 +75,6 @@
             // 
             this.tabPage1.Controls.Add(this.buttonControl);
             this.tabPage1.Controls.Add(this.gameMediaPlayer);
-            this.tabPage1.Controls.Add(this.richTextBoxSubtitle);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -102,15 +100,6 @@
             this.gameMediaPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("gameMediaPlayer.OcxState")));
             this.gameMediaPlayer.Size = new System.Drawing.Size(330, 182);
             this.gameMediaPlayer.TabIndex = 1;
-            // 
-            // richTextBoxSubtitle
-            // 
-            this.richTextBoxSubtitle.Enabled = false;
-            this.richTextBoxSubtitle.Location = new System.Drawing.Point(6, 6);
-            this.richTextBoxSubtitle.Name = "richTextBoxSubtitle";
-            this.richTextBoxSubtitle.Size = new System.Drawing.Size(686, 20);
-            this.richTextBoxSubtitle.TabIndex = 0;
-            this.richTextBoxSubtitle.Text = "";
             // 
             // tabPage2
             // 
@@ -329,7 +318,6 @@
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonLoad;
         private System.Windows.Forms.TextBox textBoxVideoTimer;
-        private System.Windows.Forms.RichTextBox richTextBoxSubtitle;
         private AxWMPLib.AxWindowsMediaPlayer gameMediaPlayer;
         private System.Windows.Forms.Button buttonControl;
         private System.Windows.Forms.Button buttonThumbnail;
