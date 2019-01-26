@@ -13,7 +13,7 @@ namespace ORA
         public Subtitles()
         {
             letters = new List<Letter>();
-            Letter.Init(Color.Green, Color.Black, new Font("Splash", 24), 20);
+            Letter.Init(Color.Green, Color.Black, new Font("Splash", 24, FontStyle.Bold), 20);
             dividerWidth = -5;
             dividerHeight = 5;
 
@@ -30,7 +30,7 @@ namespace ORA
                     startX + (letters[i].Width + dividerWidth) * (i % lineLength),
                     startY + (letters[i].Height + dividerHeight) * (i / lineLength));
                 //letters[i].SetValue(Char.ConvertFromUtf32(i)[0]);
-                letters[i].SetValue(' ');
+                letters[i].SetValue(' ',UserSettings.Instance.gameMode.IgnoreUpperCase);
             }
             curSelected = 0;
             maxPosition = 0;
@@ -55,6 +55,13 @@ namespace ORA
         public List<Letter> letters;
         public int dividerWidth;
         public int dividerHeight;
+        public bool FinishedLine
+        {
+            get
+            {
+                return (curSelected == maxPosition);
+            }
+        }
 
         public char CurrentlySelected
         {
@@ -66,25 +73,56 @@ namespace ORA
 
         public void SetText(string inp)
         {
-            for(int i = 0; i < inp.Length; i++)
+            curSelected = -1;
+            for(int i = inp.Length - 1; i >= 0; i--)
             {
-                letters[i].SetValue(inp[i]);
+                letters[i].SetValue(inp[i], UserSettings.Instance.gameMode.IgnoreUpperCase);
                 letters[i].Visible = true;
             }
             for(int i = inp.Length; i < Length; i++)
             {
                 letters[i].Visible = false;
             }
-            curSelected = 0;
             maxPosition = inp.Length;
+            MoveToNextAvailableSymbol();
         }
 
-        public void MoveToNextSymbol()
+        public int MoveToNextAvailableSymbol()
         {
-            if (curSelected == maxPosition)
-                return;
-            letters[curSelected].Activate();
+            if (curSelected < maxPosition)
+            {
+                MoveToNextSymbol();
+                while (
+                    (curSelected < maxPosition) &&
+                    (IsAllowed(letters[curSelected].value) == false)
+                    )
+                {
+                    MoveToNextSymbol();
+                }
+            }
+            return curSelected;
+        }
+
+        private void MoveToNextSymbol()
+        {
+            if (curSelected != -1)
+                letters[curSelected].Activate();
             curSelected++;
+        }
+
+        public bool IsAllowed(char symb)
+        {
+            if (UserSettings.Instance.gameMode.IgnoreSpaces == true)
+                if (symb == ' ')
+                    return false;
+            if (UserSettings.Instance.gameMode.IgnoreSpecialSymbols == true)
+            {
+                if (((('a' <= symb) && (symb <= 'z')) ||
+                    (('A' <= symb) && (symb <= 'Z')) ||
+                    (symb == ' ')) == false)
+                    return false;
+            }
+            return true;
         }
 
         public void SetParents(Control control)

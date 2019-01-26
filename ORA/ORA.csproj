@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Classes\CL.cs" />
     <Compile Include="Classes\GameController.cs" />
+    <Compile Include="Classes\GameMode.cs" />
     <Compile Include="Classes\Letter.cs" />
     <Compile Include="Classes\MapsXML.cs" />
     <Compile Include="Classes\MenuMap.cs" />

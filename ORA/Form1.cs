@@ -21,8 +21,6 @@ namespace ORA
         MenuMap[,] menuMaps;
         int curPage = 0;
 
-        List<Letter> letters = new List<Letter>();
-
         PictureBox pillar;
 
         public UserSettings settings;
@@ -246,22 +244,7 @@ namespace ORA
                 gameMediaPlayer,
                 buttonControl,
                 tabPage1);
-
-            for (int i = 0; i < 100; i++)
-            {
-                letters.Add(new Letter());
-                letters[letters.Count - 1].SetPosition(100, buttonControl.Top);
-                letters[letters.Count - 1].SetValue('A');
-            }
             //DB_Init_ASync();
-        }
-
-        private void letterHandler(Object o, EventArgs e)
-        {
-            int counter = 0;
-            for (int i = 0; i < 100; i++)
-                if (letters[i] == (Letter)o)
-                    counter = i;
         }
 
         public void MenuMap_Click(Object o, EventArgs e)

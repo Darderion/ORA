@@ -137,11 +137,15 @@ namespace ORA
             label.ForeColor = ColourDeactivated;
         }
 
-        public void SetValue(char inp)
+        public void SetValue(char inp, bool IgnoreUpperCase)
         {
             Reset();
-            value = inp;
             label.Text = inp.ToString();
+            if (IgnoreUpperCase == true)
+                value = char.ToLower(inp);
+            else
+                value = inp;
+            UpdateSize();
         }
 
         public void SetPosition(int x_inp, int y_inp)
@@ -171,6 +175,11 @@ namespace ORA
             timerAnimation.Enabled = true;
             progress = 0;
             label.ForeColor = ColourActivated;
+        }
+
+        public void UpdateSize()
+        {
+            label.Size = TextRenderer.MeasureText(label.Text, label.Font);
         }
     }
 }
