@@ -24,6 +24,12 @@ namespace ORA
         public const int LoginSettingsButtonBack = 5;
         public const int LoginMenuButtons = 6;
 
+        public const int SettingsPauseBeforeText = 0;
+        public const int SettingsIgnoreSpecialSymbols = 1;
+        public const int SettingsIgnoreUpperCase = 2;
+        public const int SettingsIgnoreSpaces = 3;
+        public const int SettingsButtons = 4;
+
         public const int MinimalWidth = 800;
         public const int MinimalHeight = 600;
 

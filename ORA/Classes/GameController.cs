@@ -1,6 +1,7 @@
 ﻿using AxWMPLib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace ORA
         public GameController()
         {
             subtitles = new Subtitles();
+            stopWatch = new Stopwatch();
         }
 
         private static GameController instance;
@@ -53,6 +55,7 @@ namespace ORA
         Timer timer;
         AxWindowsMediaPlayer player;
         Button controlButton;
+        Stopwatch stopWatch;
 
         private void Init(Control control)
         {
@@ -91,11 +94,18 @@ namespace ORA
             Play();
         }
 
+        public void Reset()
+        {
+            subtitles.SetText("");
+            curSubtitlePos = 0;
+            isPlaying = false;
+            stopWatch.Reset();
+        }
+
         public void SetMap(IMap inp_map)
         {
             map = inp_map;
-            curSubtitlePos = 0;
-            isPlaying = false;
+            Reset();
         }
 
         private void TimerTick(Object o, EventArgs e)
@@ -106,6 +116,7 @@ namespace ORA
                 if (curTimerPos == map.finishPos)
                 {
                     //Finish line
+                    controlButton.Text = stopWatch.Elapsed.TotalSeconds.ToString();
                     player.Ctlcontrols.stop();
                 }
                 if (map.dict.ContainsKey(curTimerPos))
@@ -121,7 +132,6 @@ namespace ORA
                 }
                 prevTimerPos = curTimerPos;
             }
-            controlButton.Text = curSubtitlePos + "<";
         }
 
         private void Pause()
@@ -130,6 +140,7 @@ namespace ORA
             {
                 paused = true;
                 player.Ctlcontrols.pause();
+                stopWatch.Start();
             }
         }
 
@@ -139,6 +150,7 @@ namespace ORA
             {
                 paused = false;
                 player.Ctlcontrols.play();
+                stopWatch.Stop();
             }
         }
 

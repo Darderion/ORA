@@ -37,6 +37,7 @@ namespace ORA
         public int resolutionHeight;
         public bool isUsingDB;
 
+        [XmlIgnore]
         public GameMode gameMode;
 
         public bool Save()

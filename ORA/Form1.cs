@@ -19,6 +19,8 @@ namespace ORA
         TMapEditor mapEditor;
         PictureBox[] menuButtons;
         MenuMap[,] menuMaps;
+        PictureBox[] settingsCheckBoxes;
+        Label[] settingsLabels;
         int curPage = 0;
 
         PictureBox pillar;
@@ -186,8 +188,9 @@ namespace ORA
             //Test properties
             tabPage1.BackColor = Color.Gray;
             tabPage2.BackColor = Color.Gray;
-            tabPage3.BackColor = Color.Green;
+            tabPage3.BackColor = Color.Gray; //Green
             tabPage4.BackColor = Color.Gray;
+            tabPage5.BackColor = Color.Gray;
             textBoxVideoURL.Text = "Data/Videos/";
 
             pillar = new PictureBox();
@@ -244,7 +247,61 @@ namespace ORA
                 gameMediaPlayer,
                 buttonControl,
                 tabPage1);
+
+            settingsCheckBoxes = new PictureBox[CL.SettingsButtons];
+            settingsLabels = new Label[CL.SettingsButtons];
+            for(int i = 0; i < CL.SettingsButtons; i++)
+            {
+                settingsCheckBoxes[i] = new PictureBox();
+                settingsCheckBoxes[i].Parent = mainTabControl.TabPages[CL.OptionsButton];
+                if (settings.gameMode[i] == true)
+                    settingsCheckBoxes[i].Image = Image.FromFile(CL.FolderImages + "CheckedBox.png");
+                else
+                    settingsCheckBoxes[i].Image = Image.FromFile(CL.FolderImages + "UncheckedBox.png");
+                settingsCheckBoxes[i].Size = settingsCheckBoxes[i].Image.Size;
+                settingsCheckBoxes[i].Top = i * (settingsCheckBoxes[i].Size.Height + 10) + 10;
+                settingsCheckBoxes[i].Left = 10;
+                settingsCheckBoxes[i].Click += SettingsCheckBox_Click;
+
+                settingsLabels[i] = new Label();
+                settingsLabels[i].Parent = settingsCheckBoxes[i].Parent;
+                settingsLabels[i].Left = settingsCheckBoxes[i].Left + settingsCheckBoxes[i].Width + 10;
+                settingsLabels[i].Top = settingsCheckBoxes[i].Top + (settingsCheckBoxes[i].Height / 2);
+                settingsLabels[i].Height = 50;
+                settingsLabels[i].Font = new Font(settingsLabels[i].Parent.Font.FontFamily, 28);
+            }
+            settingsLabels[0].Text = "Pause mode (Unchangeable)";
+            settingsLabels[1].Text = "Ignore special symbols";
+            settingsLabels[2].Text = "Ignore upper case";
+            settingsLabels[3].Text = "Ignore spaces";
+
+            foreach(var label in settingsLabels)
+            {
+                label.Size = TextRenderer.MeasureText(label.Text, label.Font);
+            }
             //DB_Init_ASync();
+        }
+
+        private void SettingsCheckBox_Click(Object o, EventArgs e)
+        {
+            int cur = -1;
+            for(int i = 0; i < CL.SettingsButtons; i++)
+            {
+                if (settingsCheckBoxes[i] == o)
+                    cur = i;
+            }
+            if (cur == CL.SettingsPauseBeforeText) return;
+            settings.gameMode[cur] = !settings.gameMode[cur];
+            settingsCheckBoxes[cur].Image = Image.FromFile(CL.FolderImages + getSettingsCheckBoxName(settings.gameMode[cur]) + ".png");
+            settings.Save();
+        }
+
+        private string getSettingsCheckBoxName(bool inp)
+        {
+            if (inp == true)
+                return "CheckedBox";
+            else
+                return "UncheckedBox";
         }
 
         public void MenuMap_Click(Object o, EventArgs e)

@@ -52,11 +52,14 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.editorTimer = new System.Windows.Forms.Timer(this.components);
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.labelStopWatchResult = new System.Windows.Forms.Label();
             this.mainTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gameMediaPlayer)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).BeginInit();
+            this.tabPage5.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTabControl
@@ -65,6 +68,7 @@
             this.mainTabControl.Controls.Add(this.tabPage2);
             this.mainTabControl.Controls.Add(this.tabPage3);
             this.mainTabControl.Controls.Add(this.tabPage4);
+            this.mainTabControl.Controls.Add(this.tabPage5);
             this.mainTabControl.Location = new System.Drawing.Point(72, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -80,7 +84,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(698, 497);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "tabPagePlayer";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // buttonControl
@@ -122,7 +126,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(698, 497);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "tabPageEditor";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // buttonThumbnail
@@ -262,7 +266,7 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(698, 497);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.Text = "tabPageSettings";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // tabPage4
@@ -271,13 +275,32 @@
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(698, 497);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "tabPage4";
+            this.tabPage4.Text = "tabPageMaps";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // editorTimer
             // 
             this.editorTimer.Interval = 250;
             this.editorTimer.Tick += new System.EventHandler(this.editorTimer_Tick);
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.labelStopWatchResult);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(698, 497);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "tabPageResults";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // labelStopWatchResult
+            // 
+            this.labelStopWatchResult.AutoSize = true;
+            this.labelStopWatchResult.Location = new System.Drawing.Point(20, 19);
+            this.labelStopWatchResult.Name = "labelStopWatchResult";
+            this.labelStopWatchResult.Size = new System.Drawing.Size(113, 13);
+            this.labelStopWatchResult.TabIndex = 0;
+            this.labelStopWatchResult.Text = "labelStopWatchResult";
             // 
             // Form1
             // 
@@ -294,6 +317,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editorPlayer)).EndInit();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -322,6 +347,8 @@
         private System.Windows.Forms.Button buttonControl;
         private System.Windows.Forms.Button buttonThumbnail;
         private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Label labelStopWatchResult;
     }
 }
 
