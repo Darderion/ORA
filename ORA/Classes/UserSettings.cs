@@ -11,22 +11,40 @@ namespace ORA
 {
     public class UserSettings
     {
-        public UserSettings()
+        private UserSettings()
         {
             resolutionWidth = Screen.PrimaryScreen.Bounds.Width;
             resolutionHeight = Screen.PrimaryScreen.Bounds.Height;
             isUsingDB = false;
+            gameMode = new GameMode();
+        }
+
+        private static UserSettings instance;
+
+        public static UserSettings Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new UserSettings();
+                }
+                return instance;
+            }
         }
 
         public int resolutionWidth;
         public int resolutionHeight;
         public bool isUsingDB;
 
+        [XmlIgnore]
+        public GameMode gameMode;
+
         public bool Save()
         {
             try
             {
-                using (var sw = new StreamWriter(CL.DefaultSettingsFileName))
+                using (var sw = new StreamWriter(CL.DataFolder + CL.DefaultSettingsFileName))
                 {
                     var xm = new XmlSerializer(typeof(UserSettings));
                     xm.Serialize(sw, this);
@@ -43,7 +61,7 @@ namespace ORA
         {
             try
             {
-                using (var sr = new StreamReader(CL.DefaultSettingsFileName))
+                using (var sr = new StreamReader(CL.DataFolder+CL.DefaultSettingsFileName))
                 {
                     var xm = new XmlSerializer(typeof(UserSettings));
                     UserSettings loadedSettings = (UserSettings)xm.Deserialize(sr);

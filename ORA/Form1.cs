@@ -1,5 +1,4 @@
 ﻿using System;
-using AxWMPLib;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,8 +15,13 @@ namespace ORA
     public partial class Form1 : Form
     {
         public IMapStorage storage;
+        GameController gameController;
         TMapEditor mapEditor;
         PictureBox[] menuButtons;
+        MenuMap[,] menuMaps;
+        PictureBox[] settingsCheckBoxes;
+        Label[] settingsLabels;
+        int curPage = 0;
 
         PictureBox pillar;
 
@@ -30,7 +34,8 @@ namespace ORA
 
         private void PlayButton_OnClick_Handler(object sender, EventArgs e)
         {
-            mainTabControl.SelectedIndex = 0;
+            MenuService.UpdateMapsPage(storage, ref menuMaps, curPage);
+            mainTabControl.SelectedIndex = 3;
         }
 
         private void MapsButton_OnClick_Handler(object sender, EventArgs e)
@@ -156,6 +161,7 @@ namespace ORA
             textBoxVideoTimer.Left = editorPlayer.Left;
             textBoxVideoTimer.Top = textBoxSubtitle.Top;
             textBoxVideoTimer.Text = "";
+            textBoxSubtitle.Width = editorPlayer.Width + editorPlayer.Left - textBoxSubtitle.Left;
 
             buttonPlay.Width = GetTextWidth(buttonPlay) + 10;
             buttonResumePause.Width = GetTextWidth(buttonResumePause) + 10;
@@ -182,7 +188,9 @@ namespace ORA
             //Test properties
             tabPage1.BackColor = Color.Gray;
             tabPage2.BackColor = Color.Gray;
-            tabPage3.BackColor = Color.Green;
+            tabPage3.BackColor = Color.Gray; //Green
+            tabPage4.BackColor = Color.Gray;
+            tabPage5.BackColor = Color.Gray;
             textBoxVideoURL.Text = "Data/Videos/";
 
             pillar = new PictureBox();
@@ -211,58 +219,114 @@ namespace ORA
                 .MapStorage(storage)
                 .Thumbnail(buttonThumbnail);
             mapEditor.AddHandlers();
-            mapEditor.ChangeDBConnectionState(false);
-
-            richTextBoxSubtitle.Width = tabPage1.Width - 20;
-            richTextBoxSubtitle.Left = 10;
-            richTextBoxSubtitle.Height = FontHeight * 3 + 5;
-            richTextBoxSubtitle.Top = tabPage1.Height - richTextBoxSubtitle.Height - 10;
-
-            buttonControl.Top = richTextBoxSubtitle.Top;
-            buttonControl.Height = richTextBoxSubtitle.Height;
+            mapEditor.ChangeDBConnectionState(true);
+            
             buttonControl.Width = buttonControl.Height;
             buttonControl.Left = tabPage1.Width - buttonControl.Width - 10;
-            richTextBoxSubtitle.Width -= buttonControl.Width + 10;
 
             gameMediaPlayer.Top = 10;
             gameMediaPlayer.Left = 10;
             gameMediaPlayer.Width = tabPage1.Width - 20;
-            gameMediaPlayer.Height = richTextBoxSubtitle.Top - 20;
 
-            DB_Init_ASync();
+            buttonControl.Width = 100;
+            buttonControl.Height = buttonControl.Width;
+            
+            gameMediaPlayer.Height = tabPage1.Height - 40 - buttonControl.Height;
+
+            buttonControl.Top = gameMediaPlayer.Top + gameMediaPlayer.Height + 10;
+            buttonControl.Left = gameMediaPlayer.Left + gameMediaPlayer.Width - buttonControl.Width;
+
+			pictureBoxResult.Width = tabPage5.Width - pictureBoxResult.Left - 10;
+			pictureBoxResult.Height = tabPage5.Height - pictureBoxResult.Top - 10;
+			pictureBoxResult.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            menuMaps = new MenuMap[4, 4];
+            MenuService.SetMenuMaps(ref menuMaps, tabPage4);
+            foreach(var menuMap in menuMaps)
+            {
+                menuMap.pic.Click += MenuMap_Click;
+            }
+            
+            GameController.Instance.SetGameController(
+                gameMediaPlayer,
+                buttonControl,
+                mainTabControl, 0, 4,
+				labelStopWatchResult,
+				pictureBoxResult);
+
+            settingsCheckBoxes = new PictureBox[CL.SettingsButtons];
+            settingsLabels = new Label[CL.SettingsButtons];
+            for(int i = 0; i < CL.SettingsButtons; i++)
+            {
+                settingsCheckBoxes[i] = new PictureBox();
+                settingsCheckBoxes[i].Parent = mainTabControl.TabPages[CL.OptionsButton];
+                if (settings.gameMode[i] == true)
+                    settingsCheckBoxes[i].Image = Image.FromFile(CL.FolderImages + "CheckedBox.png");
+                else
+                    settingsCheckBoxes[i].Image = Image.FromFile(CL.FolderImages + "UncheckedBox.png");
+                settingsCheckBoxes[i].Size = settingsCheckBoxes[i].Image.Size;
+                settingsCheckBoxes[i].Top = i * (settingsCheckBoxes[i].Size.Height + 10) + 10;
+                settingsCheckBoxes[i].Left = 10;
+                settingsCheckBoxes[i].Click += SettingsCheckBox_Click;
+
+                settingsLabels[i] = new Label();
+                settingsLabels[i].Parent = settingsCheckBoxes[i].Parent;
+                settingsLabels[i].Left = settingsCheckBoxes[i].Left + settingsCheckBoxes[i].Width + 10;
+                settingsLabels[i].Top = settingsCheckBoxes[i].Top + (settingsCheckBoxes[i].Height / 2);
+                settingsLabels[i].Height = 50;
+                settingsLabels[i].Font = new Font(settingsLabels[i].Parent.Font.FontFamily, 28);
+            }
+            settingsLabels[0].Text = "Pause mode (Unchangeable)";
+            settingsLabels[1].Text = "Ignore special symbols";
+            settingsLabels[2].Text = "Ignore upper case";
+            settingsLabels[3].Text = "Ignore spaces";
+
+            foreach(var label in settingsLabels)
+            {
+                label.Size = TextRenderer.MeasureText(label.Text, label.Font);
+            }
+            //DB_Init_ASync();
         }
 
-        public async Task DB_Init_ASync()
+        private void SettingsCheckBox_Click(Object o, EventArgs e)
         {
-            await Task.Run(Init_ASync);
+            int cur = -1;
+            for(int i = 0; i < CL.SettingsButtons; i++)
+            {
+                if (settingsCheckBoxes[i] == o)
+                    cur = i;
+            }
+            if (cur == CL.SettingsPauseBeforeText) return;
+            settings.gameMode[cur] = !settings.gameMode[cur];
+            settingsCheckBoxes[cur].Image = Image.FromFile(CL.FolderImages + getSettingsCheckBoxName(settings.gameMode[cur]) + ".png");
+            settings.Save();
         }
 
-        public async Task Init_ASync()
+        private string getSettingsCheckBoxName(bool inp)
         {
-            try
+            if (inp == true)
+                return "CheckedBox";
+            else
+                return "UncheckedBox";
+        }
+
+        public void MenuMap_Click(Object o, EventArgs e)
+        {
+            int sx = 0;
+            int sy = 0;
+            for (int x = 0; x < menuMaps.GetLength(0); x++)
             {
-                storage.Reset();
-
-                Map map = new Map("Test Map", CL.VideoFolder + "JJS.mp4", 7, 160);
-                map.AddSubtitle(8, "JJ1-0") //0
-                    .AddSubtitle(9, "JJ1-1") //1
-                    .AddSubtitle(4, "JJ1-4")
-                    .AddSubtitle(3, "JJ1-3");
-                storage.Save(map);
-
-                map = new Map("Test Map 2", CL.VideoFolder + "JJS.mp4", 0, 162);
-                map.AddSubtitle(0, "0")
-                    .AddSubtitle(1, "1")
-                    .AddSubtitle(5, "5")
-                    .AddSubtitle(7, "7");
-                storage.Save(map);
-
-                mapEditor.ChangeDBConnectionState(true);
+                for (int y = 0; y < menuMaps.GetLength(1); y++)
+                {
+                    if (o == menuMaps[x, y].pic)
+                    {
+                        sx = x;
+                        sy = y;
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Async : "+ex.Message);
-            }
+            GameController.Instance.SetMap(storage.Load(menuMaps[sx,sy].mapName));
+            mainTabControl.SelectedIndex = 0;
         }
 
         private void editorTimer_Tick(object sender, EventArgs e)
@@ -314,15 +378,33 @@ namespace ORA
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            if (mapEditor.Thumbnail == null)
+            {
+                MessageBox.Show("No Thumbnail");
+                return;
+            }
             if (editorPlayer.currentMedia != null)
             {
                 using (var frm = new FormSaveMap())
                 {
+                    frm.Pos1 = mapEditor.StartPos;
+                    frm.Pos2 = mapEditor.FinishPos;
                     frm.StartPosition = FormStartPosition.CenterParent;
                     frm.ShowXY(textBoxVideoURL.Text, (int)editorPlayer.currentMedia.duration - 1);
                     if (frm.DialogResult == DialogResult.OK)
                     {
-                        mapEditor.Thumbnail.Save(CL.ThumbnailFolder + frm.SceneName + ".png");
+                        Directory.CreateDirectory(CL.ThumbnailFolder);
+                        string thumbnailName = CL.ThumbnailFolder + frm.SceneName + ".png";
+                        try
+                        {
+                            if (File.Exists(thumbnailName) == true)
+                                File.Delete(thumbnailName);
+                            mapEditor.Thumbnail.Save(thumbnailName);
+                        }
+                        catch(Exception ex)
+                        {
+
+                        }
                         mapEditor.Save(frm.VideoURL, frm.SceneName, frm.Pos1, frm.Pos2);
                         mapEditor.LoadMap(frm.SceneName);
                     }

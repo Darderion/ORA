@@ -5,3 +5,5 @@
 /ORA/bin
 /ORA/obj
 /ORA/obj/Debug/TempPE
+*.suo
+ORA\.vs\ORA

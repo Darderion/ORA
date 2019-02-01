@@ -19,5 +19,44 @@ namespace ORA.Tests
                 .AddSubtitle(8, "Test 8 (3)");
             Assert.AreEqual(3, map.dict.Count);
         }
+
+        [TestMethod]
+        public void GameController_IsInputCharacter()
+        {
+            Assert.AreEqual(true, GameController.isInputChar('a'));
+            Assert.AreEqual(true, GameController.isInputChar('o'));
+            Assert.AreEqual(true, GameController.isInputChar(' '));
+
+            Assert.AreEqual(false, GameController.isInputChar('*'));
+            Assert.AreEqual(false, GameController.isInputChar('$'));
+            Assert.AreEqual(false, GameController.isInputChar('.'));
+        }
+
+        [TestMethod]
+        public void GameController_MoveToNextSymbol()
+        {
+            Subtitles subtitles = new Subtitles();
+            UserSettings userSettings = UserSettings.Instance;
+            subtitles.SetText("ABC0123456789,'DEFG");
+            Assert.AreEqual(1, subtitles.MoveToNextAvailableSymbol());
+            Assert.AreEqual(2, subtitles.MoveToNextAvailableSymbol());
+            Assert.AreEqual(15, subtitles.MoveToNextAvailableSymbol());
+            Assert.AreEqual(16, subtitles.MoveToNextAvailableSymbol());
+            Assert.AreEqual(17, subtitles.MoveToNextAvailableSymbol());
+            Assert.AreEqual(18, subtitles.MoveToNextAvailableSymbol());
+            Assert.AreEqual(19, subtitles.MoveToNextAvailableSymbol());
+            Assert.AreEqual(19, subtitles.MoveToNextAvailableSymbol());
+        }
+
+        [TestMethod]
+        public void GameController_UpperCase()
+        {
+            Subtitles subtitles = new Subtitles();
+            UserSettings userSettings = UserSettings.Instance;
+            userSettings.gameMode.IgnoreUpperCase = true;
+            subtitles.SetText("ABCdefGHIjkl");
+
+            Assert.AreEqual('a', subtitles.CurrentlySelected);
+        }
     }
 }

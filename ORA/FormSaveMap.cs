@@ -114,6 +114,8 @@ namespace ORA
 
         private void FormSaveMap_Load(object sender, EventArgs e)
         {
+            textBoxStartingPos.Text = Pos1.ToString();
+            textBoxFinishPosition.Text = Pos2.ToString();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)

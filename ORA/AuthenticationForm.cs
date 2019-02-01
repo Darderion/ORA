@@ -15,7 +15,7 @@ namespace ORA
     public partial class AuthenticationForm : Form
     {
         PictureBox[] menuButtons = new PictureBox[CL.LoginMenuButtons];
-        UserSettings settings = new UserSettings();
+        UserSettings settings = UserSettings.Instance;
 
         public AuthenticationForm()
         {
@@ -43,7 +43,11 @@ namespace ORA
 
         private void AuthenticationForm_Load(object sender, EventArgs e)
         {
-            settings.Load();
+            if (settings.Load() == false)
+            {
+                MessageBox.Show("File with User Settings is either corrupted or not present. Creating new user settings...");
+                UserSettings.Instance.Save();
+            }
             if (File.Exists(CL.FolderImages+"MainMenu.bmp") == true)
             {
                 this.BackgroundImage = Image.FromFile(CL.FolderImages + "MainMenu.bmp");
