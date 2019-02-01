@@ -236,6 +236,10 @@ namespace ORA
             buttonControl.Top = gameMediaPlayer.Top + gameMediaPlayer.Height + 10;
             buttonControl.Left = gameMediaPlayer.Left + gameMediaPlayer.Width - buttonControl.Width;
 
+			pictureBoxResult.Width = tabPage5.Width - pictureBoxResult.Left - 10;
+			pictureBoxResult.Height = tabPage5.Height - pictureBoxResult.Top - 10;
+			pictureBoxResult.SizeMode = PictureBoxSizeMode.StretchImage;
+
             menuMaps = new MenuMap[4, 4];
             MenuService.SetMenuMaps(ref menuMaps, tabPage4);
             foreach(var menuMap in menuMaps)
@@ -246,7 +250,9 @@ namespace ORA
             GameController.Instance.SetGameController(
                 gameMediaPlayer,
                 buttonControl,
-                tabPage1);
+                mainTabControl, 0, 4,
+				labelStopWatchResult,
+				pictureBoxResult);
 
             settingsCheckBoxes = new PictureBox[CL.SettingsButtons];
             settingsLabels = new Label[CL.SettingsButtons];

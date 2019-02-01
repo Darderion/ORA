@@ -20,17 +20,15 @@ namespace ORA
 
         private static GameController instance;
 
-        private string[] text;
-        public Subtitles subtitles;
-        public bool isPlaying;
-
-        private bool paused;
-
-        public void SetGameController(AxWindowsMediaPlayer inp_player, Button inp_button, Control control)
+        public void SetGameController(AxWindowsMediaPlayer inp_player, Button inp_button, TabControl parentControl, int pageStart, int pageFinish, Label resultLabel, PictureBox resultPicture)
         {
+			pageResult = pageFinish;
             player = inp_player;
             controlButton = inp_button;
-            Init(control);
+			parentTabControl = parentControl;
+            Init(parentControl.TabPages[pageStart]);
+			pictureBoxResult = resultPicture;
+			labelResult = resultLabel;
         }
 
         public static GameController Instance
@@ -51,11 +49,21 @@ namespace ORA
 
         int curSubtitlePos = 0;
         int curSubtitleInd = 2;
+		
+		private string[] text;
+		public Subtitles subtitles;
+		public bool isPlaying;
+		int pageResult;
 
-        Timer timer;
+		private bool paused;
+
+		Timer timer;
         AxWindowsMediaPlayer player;
         Button controlButton;
         Stopwatch stopWatch;
+		TabControl parentTabControl;
+		Label labelResult;
+		PictureBox pictureBoxResult;
 
         private void Init(Control control)
         {
@@ -108,6 +116,24 @@ namespace ORA
             Reset();
         }
 
+		public void FinishMap()
+		{
+			stopWatch.Stop();
+			player.Ctlcontrols.stop();
+			parentTabControl.SelectTab(pageResult);
+			labelResult.Text = stopWatch.Elapsed.TotalSeconds.ToString();
+
+			string ResImage = "";
+			double Res = stopWatch.Elapsed.TotalSeconds / (map.finishPos - map.startPos);
+			ResImage = CL.ResultImages[4];
+			if (Res < 0.8) ResImage = CL.ResultImages[3];
+			if (Res < 0.6) ResImage = CL.ResultImages[2];
+			if (Res < 0.4) ResImage = CL.ResultImages[1];
+			if (Res < 0.2) ResImage = CL.ResultImages[0];
+
+			pictureBoxResult.Image = Image.FromFile(CL.FolderImages + ResImage + ".png");
+		}
+
         private void TimerTick(Object o, EventArgs e)
         {
             curTimerPos = (int) player.Ctlcontrols.currentPosition;
@@ -115,9 +141,10 @@ namespace ORA
             {
                 if (curTimerPos == map.finishPos)
                 {
-                    //Finish line
-                    controlButton.Text = stopWatch.Elapsed.TotalSeconds.ToString();
-                    player.Ctlcontrols.stop();
+					//Finish line
+					//Ignores subtitle[subtitle.Count]
+					//Doesn't re-save the map
+					FinishMap();
                 }
                 if (map.dict.ContainsKey(curTimerPos))
                 {

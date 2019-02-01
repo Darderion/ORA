@@ -51,6 +51,11 @@ namespace ORA
             "LoginSettingsButtonBack"
         };
 
+		public static readonly string[] ResultImages =
+		{
+			"S", "A", "B", "C", "D"
+		};
+
         public static readonly string LockedMap = "TheLock";
         public static readonly string NoMap = "None";
     }
