@@ -14,25 +14,8 @@ namespace ORA
         {
             letters = new List<Letter>();
             Letter.Init(Color.Green, Color.Black, new Font("Splash", 24, FontStyle.Bold), 20);
-            dividerWidth = -5;
-            dividerHeight = 5;
 
-            lineLength = 22;
-            numberOfLines = 3;
-
-            startX = 20;
-            startY = 870;
-
-            for (int i = 0; i < Length; i++)
-            {
-                letters.Add(new Letter());
-                letters[i].SetPosition(
-                    startX + (letters[i].Width + dividerWidth) * (i % lineLength),
-                    startY + (letters[i].Height + dividerHeight) * (i / lineLength));
-                //letters[i].SetValue(Char.ConvertFromUtf32(i)[0]);
-                letters[i].SetValue(' ',UserSettings.Instance.gameMode.IgnoreUpperCase);
-            }
-            curSelected = 0;
+			curSelected = 0;
             maxPosition = 0;
         }
 
@@ -43,6 +26,8 @@ namespace ORA
 
         int startX;
         int startY;
+
+		static Control defaultControl;
 
         public int Length
         {
@@ -71,8 +56,49 @@ namespace ORA
             }
         }
 
+		public int GetHorizontalNumber(int width, int divider, Font font, int n)
+		{
+			if ((TextRenderer.MeasureText("S", font).Width + divider) * (n + 1) < width)
+				return GetHorizontalNumber(width, divider, font, n + 1);
+			return n;
+		}
+
+		public int GetVerticalNumber(int height, int divider, Font font, int n)
+		{
+			if ((TextRenderer.MeasureText("S", font).Height + divider) * (n + 1) < height)
+				return GetHorizontalNumber(height, divider, font, n + 1);
+			return n;
+		}
+
+		public void SetPosition(int x, int y, int width, int height)
+		{
+			letters.Clear();
+			dividerWidth = -5;
+			dividerHeight = 5;
+
+			lineLength = GetHorizontalNumber(width, 5, Letter.defaultFont, 0); //22
+			numberOfLines = GetVerticalNumber(height, dividerHeight, Letter.defaultFont, 0); //3
+
+			startX = x; //20
+			startY = y; //870
+
+			for (int i = 0; i < Length; i++)
+			{
+				letters.Add(new Letter());
+				letters[i].SetPosition(
+					startX + (letters[i].Width + dividerWidth) * (i % lineLength),
+					startY + (letters[i].Height + dividerHeight) * (i / lineLength));
+				letters[i].Parent = defaultControl;
+				letters[i].SetValue(' ', UserSettings.Instance.gameMode.IgnoreUpperCase);
+			}
+		}
+
         public void SetText(string inp)
         {
+			//Handle inp.Length > max
+			if (inp.Length > Length)
+				inp = inp.Remove(Length);
+
             curSelected = -1;
             for(int i = inp.Length - 1; i >= 0; i--)
             {
@@ -125,12 +151,9 @@ namespace ORA
             return true;
         }
 
-        public void SetParents(Control control)
+        public void SetParent(Control control)
         {
-            foreach(var letter in letters)
-            {
-                letter.Parent = control;
-            }
+			defaultControl = control;
         }
     }
 }

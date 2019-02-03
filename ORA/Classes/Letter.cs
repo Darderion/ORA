@@ -29,7 +29,7 @@ namespace ORA
 
         private static Color ColourActivated;
         private static Color ColourDeactivated;
-        private static Font defaultFont;
+        public static Font defaultFont;
         private static int maxProgressRange;
         private static int halfProgressRange;
         private static Size defaultSize;

@@ -77,7 +77,7 @@ namespace ORA
 
             controlButton.Click += controlButton_Click;
 
-            subtitles.SetParents(control);
+			subtitles.SetParent(control);
         }
 
         public void Play()
@@ -108,6 +108,7 @@ namespace ORA
             curSubtitlePos = 0;
             isPlaying = false;
             stopWatch.Reset();
+			controlButton.Text = "Type";
         }
 
         public void SetMap(IMap inp_map)
@@ -137,6 +138,7 @@ namespace ORA
         private void TimerTick(Object o, EventArgs e)
         {
             curTimerPos = (int) player.Ctlcontrols.currentPosition;
+			controlButton.Text = stopWatch.Elapsed.Seconds.ToString();
             if (prevTimerPos < curTimerPos)
             {
                 if (curTimerPos == map.finishPos)
@@ -200,6 +202,14 @@ namespace ORA
         private void UserTyped(Object o, EventArgs e)
         {
             char symb = ((KeyPressEventArgs)e).KeyChar;
+
+			if (symb == '\\')
+			{
+				Reset();
+				Play();
+				return;
+			}
+
             if (UserSettings.Instance.gameMode.IgnoreUpperCase == true)
                 symb = Char.ToLower(symb);
             if (letterTypedCorrectly(symb) == true)

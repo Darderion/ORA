@@ -253,6 +253,12 @@ namespace ORA
                 mainTabControl, 0, 4,
 				labelStopWatchResult,
 				pictureBoxResult);
+			GameController.Instance.subtitles.SetPosition(
+				gameMediaPlayer.Left,
+				gameMediaPlayer.Top + gameMediaPlayer.Height + 20,
+				gameMediaPlayer.Width - buttonControl.Width - 10,
+				tabPage1.Width - gameMediaPlayer.Top - gameMediaPlayer.Height - 50
+				);
 
             settingsCheckBoxes = new PictureBox[CL.SettingsButtons];
             settingsLabels = new Label[CL.SettingsButtons];
